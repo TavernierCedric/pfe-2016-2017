@@ -17,7 +17,9 @@ var express = require('express');
 var configDB = require('./config/database.js');
 var router = express.Router();
     pg = require('pg');
-    connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/todo';
+    connectionString = 'postgres://postgres:xxx@localhost:5432/pfe'
+var client = new pg.Client(connectionString);
+client.connect();
 
 
 app.use(session({ secret: '4a1l23k6rt$$' }));
@@ -27,6 +29,17 @@ app.use(flash());
 
 require('./config/passport')(passport);
 require('./app/routes.js');
+
+  pg.connect(connectionString, (err, client, done) => {
+    // Handle connection errors
+    if(err) {
+      done();
+      console.log(err);
+      return res.status(500).json({success: false, data: err});
+    }else{
+        console.log('Successfully connected to local database');
+    }
+    });
 
 server.listen(port);
 console.log('Listening  to  port ' + port);
