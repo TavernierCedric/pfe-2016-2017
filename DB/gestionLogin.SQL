@@ -3,7 +3,7 @@ DROP SCHEMA gestionLogin CASCADE;
 CREATE SCHEMA gestionLogin;
 
 CREATE SEQUENCE gestionLogin.pk_profils;
-CREATE SEQUENCE gestionLogin.pk_applications;
+CREATE SEQUENCE gestionLogin.pk_logiciels;
 
 
 CREATE TABLE gestionLogin.Profils (
@@ -21,58 +21,58 @@ CREATE TABLE gestionLogin.Utilisateurs (
 );
 
 
-CREATE TABLE gestionLogin.Applications (
-	id_application INTEGER NOT NULL PRIMARY KEY DEFAULT NEXTVAL ('gestionLogin.pk_applications'),
+CREATE TABLE gestionLogin.Logiciels (
+	id_logiciel INTEGER PRIMARY KEY DEFAULT NEXTVAL ('gestionLogin.pk_logiciels'),
 	nom VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE gestionLogin.Profils_Applications (
+CREATE TABLE gestionLogin.Profils_Logiciels (
 	id_profil INTEGER NOT NULL REFERENCES gestionLogin.Profils(id_profil),
-	id_application INTEGER NOT NULL REFERENCES gestionLogin.Applications(id_application),
-	PRIMARY KEY (id_profil, id_application)
+	id_logiciel INTEGER NOT NULL REFERENCES gestionLogin.Logiciels(id_logiciel),
+	PRIMARY KEY (id_profil, id_logiciel)
 );
 
-CREATE TABLE gestionLogin.Utilisateurs_Applications (
-	id_application INTEGER NOT NULL REFERENCES gestionLogin.Applications(id_application),
+CREATE TABLE gestionLogin.Utilisateurs_Logiciels (
 	id_utilisateur INTEGER NOT NULL REFERENCES gestionLogin.Utilisateurs(id_utilisateur),
+	id_logiciel INTEGER NOT NULL REFERENCES gestionLogin.Logiciels(id_logiciel),
 	mdp VARCHAR(255) NOT NULL,
-	PRIMARY KEY (id_utilisateur, id_application)
+	PRIMARY KEY (id_utilisateur, id_logiciel)
 );
 
 -- VUE POUR CLAROLINE VERS CSV
 CREATE VIEW gestionLogin.clarolineVersCSV(nom, prenom, mail, mdp) AS 
-	SELECT u.nom, u.prenom, u.mail, ua.mdp
-	FROM gestionLogin.Utilisateurs u, gestionLogin.Utilisateurs_Applications ua, gestionLogin.Profils p, gestionLogin.Profils_Applications pa, gestionLogin.Applications a
-	WHERE a.nom LIKE 'Claroline' AND u.id_profil = p.id_profil AND p.id_profil = pa.id_profil 
-	AND pa.id_application = a.id_application AND u.id_utilisateur = ua.id_utilisateur 
-	AND ua.id_application = a.id_application AND u.type = 'Etudiant';	
+	SELECT u.nom, u.prenom, u.mail, ul.mdp
+	FROM gestionLogin.Utilisateurs u, gestionLogin.Utilisateurs_Logiciels ul, gestionLogin.Profils p, gestionLogin.Profils_Logiciels pl, gestionLogin.Logiciels l
+	WHERE l.nom LIKE 'Claroline' AND u.id_profil = p.id_profil AND p.id_profil = pl.id_profil 
+	AND pl.id_logiciel = l.id_logiciel AND u.id_utilisateur = ul.id_utilisateur 
+	AND ul.id_logiciel = l.id_logiciel AND u.type = 'Etudiant';	
 
 -- VUE POUR WINDOWS VERS BAT
 CREATE VIEW gestionLogin.windowsVersBAT(nom, prenom, mdp) AS 
-	SELECT u.nom, u.prenom, ua.mdp
-	FROM gestionLogin.Utilisateurs u, gestionLogin.Utilisateurs_Applications ua, gestionLogin.Profils p, gestionLogin.Profils_Applications pa, gestionLogin.Applications a
-	WHERE a.nom LIKE 'Windows' AND u.id_profil = p.id_profil AND p.id_profil = pa.id_profil 
-	AND pa.id_application = a.id_application AND u.id_utilisateur = ua.id_utilisateur 
-	AND ua.id_application = a.id_application AND u.type = 'Etudiant';	
+	SELECT u.nom, u.prenom, ul.mdp
+	FROM gestionLogin.Utilisateurs u, gestionLogin.Utilisateurs_Logiciels ul, gestionLogin.Profils p, gestionLogin.Profils_Logiciels pl, gestionLogin.Logiciels l
+	WHERE l.nom LIKE 'Windows' AND u.id_profil = p.id_profil AND p.id_profil = pl.id_profil 
+	AND pl.id_logiciel = l.id_logiciel AND u.id_utilisateur = ul.id_utilisateur 
+	AND ul.id_logiciel = l.id_logiciel AND u.type = 'Etudiant';	
 
 -- VUE POUR NUTRILOG VERS CSV
 CREATE VIEW gestionLogin.nutrilogVersCSV(id, nom, prenom, mdp) AS 
-	SELECT u.id_utilisateur, u.nom, u.prenom, ua.mdp
-	FROM gestionLogin.Utilisateurs u, gestionLogin.Utilisateurs_Applications ua, gestionLogin.Profils p, gestionLogin.Profils_Applications pa, gestionLogin.Applications a
-	WHERE a.nom LIKE 'Nutrilog' AND u.id_profil = p.id_profil AND p.id_profil = pa.id_profil 
-	AND pa.id_application = a.id_application AND u.id_utilisateur = ua.id_utilisateur 
-	AND ua.id_application = a.id_application AND u.type = 'Etudiant';
+	SELECT u.id_utilisateur, u.nom, u.prenom, ul.mdp
+	FROM gestionLogin.Utilisateurs u, gestionLogin.Utilisateurs_Logiciels ul, gestionLogin.Profils p, gestionLogin.Profils_Logiciels pl, gestionLogin.Logiciels l
+	WHERE l.nom LIKE 'Nutrilog' AND u.id_profil = p.id_profil AND p.id_profil = pl.id_profil 
+	AND pl.id_logiciel = l.id_logiciel AND u.id_utilisateur = ul.id_utilisateur 
+	AND ul.id_logiciel = l.id_logiciel AND u.type = 'Etudiant';
 
 -- Gestion des Logiciels
 
 -- AJOUT D'UN LOGICIEL
 
-CREATE OR REPLACE FUNCTION gestionLogin.ajoutApplication(VARCHAR(255)) RETURNS INTEGER AS $$
+CREATE OR REPLACE FUNCTION gestionLogin.ajoutLogiciel(VARCHAR(255)) RETURNS INTEGER AS $$
 DECLARE
-	nom_application ALIAS FOR $1;
+	nom_logiciel ALIAS FOR $1;
 	id INTEGER := 0;
 BEGIN
-	INSERT INTO gestionLogin.Applications (nom) VALUES (nom_application) RETURNING id_application INTO id;
+	INSERT INTO gestionLogin.Logiciels (nom) VALUES (nom_logiciel) RETURNING id_logiciel INTO id;
 	RETURN id;
 END;
 
@@ -80,13 +80,13 @@ $$ LANGUAGE plpgsql;
 
 -- SUPPRESSION D'UNE APPLICATION
 
-CREATE OR REPLACE FUNCTION gestionLogin.suppressionApplication(VARCHAR(255)) RETURNS INTEGER AS $$
+CREATE OR REPLACE FUNCTION gestionLogin.suppressionLogiciel(VARCHAR(255)) RETURNS INTEGER AS $$
 DECLARE
-	nom_application ALIAS FOR $1;
+	nom_logiciel ALIAS FOR $1;
 BEGIN
-	DELETE FROM gestionLogin.Profils_Applications pa USING gestionLogin.Applications a WHERE a.id_application = pa.id_application AND a.nom = nom_application;
-	DELETE FROM gestionLogin.Utilisateurs_Applications ua USING gestionLogin.Applications a WHERE a.id_application = ua.id_application AND a.nom = nom_application;
-	DELETE FROM gestionLogin.Applications a WHERE a.nom = nom_application;
+	DELETE FROM gestionLogin.Profils_Logiciels pl USING gestionLogin.Logiciels a WHERE a.id_logiciel = pl.id_logiciel AND a.nom = nom_logiciel;
+	DELETE FROM gestionLogin.Utilisateurs_Logiciels ul USING gestionLogin.Logiciels a WHERE a.id_logiciel = ul.id_logiciel AND a.nom = nom_logiciel;
+	DELETE FROM gestionLogin.Logiciels l WHERE l.nom = nom_logiciel;
 
   	RETURN 1;
 END;
