@@ -1,0 +1,21 @@
+{
+  "name": "template",
+  "version": "1.0.0",
+  "description": "Project",
+  "main": "login.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "auth0-api-jwt-rsa-validation": "0.0.1",
+    "body-parser": "*",
+    "express": "^4.14.1",
+    "express-jwt": "^5.1.0",
+    "passport": "*",
+    "pg": "^6.1.2",
+    "pg-promise": "^5.5.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  }
+}
