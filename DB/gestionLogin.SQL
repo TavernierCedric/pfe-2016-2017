@@ -1,4 +1,5 @@
 DROP SCHEMA gestionLogin CASCADE;
+
 CREATE SCHEMA gestionLogin;
 
 CREATE SEQUENCE gestionLogin.pk_profils;
@@ -6,17 +7,17 @@ CREATE SEQUENCE gestionLogin.pk_applications;
 
 
 CREATE TABLE gestionLogin.Profils (
-	id_profil INTEGER NOT NULL PRIMARY KEY DEFAULT NEXTVAL ('gestionLogin.pk_profils'), 
+	id_profil INTEGER PRIMARY KEY DEFAULT NEXTVAL ('gestionLogin.pk_profils'), 
 	nom VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE gestionLogin.Utilisateurs (
-	id_utilisateur INTEGER NOT NULL PRIMARY KEY UNIQUE,
+	id_utilisateur INTEGER PRIMARY KEY,
 	nom VARCHAR (255) NOT NULL,
 	prenom VARCHAR(255) NOT NULL,
-	mail VARCHAR(255) NOT NULL,
-	id_profil INTEGER NOT NULL REFERENCES gestionLogin.Profils(id_profil),
-	type VARCHAR(255) NOT NULL CHECK(type LIKE 'Etudiant' OR type LIKE 'Prof' OR type LIKE 'Admin' OR type LIKE 'Visiteur') 
+	mail VARCHAR(255) NOT NULL UNIQUE,
+	type VARCHAR(255) NOT NULL CHECK(type LIKE 'Etudiant' OR type LIKE 'Prof' OR type LIKE 'Admin' OR type LIKE 'Visiteur'),
+	id_profil INTEGER NOT NULL REFERENCES gestionLogin.Profils(id_profil)
 );
 
 
@@ -66,26 +67,26 @@ CREATE VIEW gestionLogin.nutrilogVersCSV(id, nom, prenom, mdp) AS
 
 -- AJOUT D'UN LOGICIEL
 
-CREATE OR REPLACE FUNCTION gestionLogin.ajoutLogiciel(VARCHAR(255)) RETURNS INTEGER AS $$
+CREATE OR REPLACE FUNCTION gestionLogin.ajoutApplication(VARCHAR(255)) RETURNS INTEGER AS $$
 DECLARE
-	nom_logiciel ALIAS FOR $1;
+	nom_application ALIAS FOR $1;
 	id INTEGER := 0;
 BEGIN
-	INSERT INTO gestionLogin.Applications VALUES (DEFAULT, nom_logiciel) RETURNING id_application INTO id;
+	INSERT INTO gestionLogin.Applications (nom) VALUES (nom_application) RETURNING id_application INTO id;
 	RETURN id;
 END;
 
 $$ LANGUAGE plpgsql;
 
--- SUPPRESSION D'UN LOGICIEL
+-- SUPPRESSION D'UNE APPLICATION
 
-CREATE OR REPLACE FUNCTION gestionLogin.suppressionLogiciel(VARCHAR(255)) RETURNS INTEGER AS $$
+CREATE OR REPLACE FUNCTION gestionLogin.suppressionApplication(VARCHAR(255)) RETURNS INTEGER AS $$
 DECLARE
-	nom_logiciel ALIAS FOR $1;
+	nom_application ALIAS FOR $1;
 BEGIN
-	DELETE FROM gestionLogin.Profils_Applications pa USING gestionLogin.Applications a WHERE a.id_application = pa.id_application AND a.nom = nom_logiciel;
-	DELETE FROM gestionLogin.Utilisateurs_Applications ua USING gestionLogin.Applications a WHERE a.id_application = ua.id_application AND a.nom = nom_logiciel;
-	DELETE FROM gestionLogin.Applications a WHERE a.nom = nom_logiciel;
+	DELETE FROM gestionLogin.Profils_Applications pa USING gestionLogin.Applications a WHERE a.id_application = pa.id_application AND a.nom = nom_application;
+	DELETE FROM gestionLogin.Utilisateurs_Applications ua USING gestionLogin.Applications a WHERE a.id_application = ua.id_application AND a.nom = nom_application;
+	DELETE FROM gestionLogin.Applications a WHERE a.nom = nom_application;
 
   	RETURN 1;
 END;
@@ -96,32 +97,32 @@ $$ LANGUAGE plpgsql;
 
 
 
--- AJOUT PROFILS
+-- INSERTION PROFIL
 
-CREATE OR REPLACE FUNCTION gestionLogin.insererProfils(VARCHAR(255)) RETURNS INTEGER AS $$
+CREATE OR REPLACE FUNCTION gestionLogin.insererProfil(VARCHAR(255)) RETURNS INTEGER AS $$
 DECLARE
 	nom_profil ALIAS FOR $1;
 	id INTEGER := 0;
 BEGIN
-	INSERT INTO gestionLogin.Profils VALUES (DEFAULT, nom_profil) RETURNING id_profil INTO id;
+	INSERT INTO gestionLogin.Profils (nom) VALUES (nom_profil) RETURNING id_profil INTO id;
 	RETURN id;
 END;
 
 $$ LANGUAGE plpgsql;
 
--- INSCRIPTION USERS
+-- INSERTION UTILISATEUR
 
-CREATE OR REPLACE FUNCTION gestionLogin.insererUtilisateur(INTEGER, VARCHAR(255), VARCHAR(255), VARCHAR(255), INTEGER, VARCHAR(255)) RETURNS INTEGER AS $$
+CREATE OR REPLACE FUNCTION gestionLogin.insererUtilisateur(INTEGER, VARCHAR(255), VARCHAR(255), VARCHAR(255), VARCHAR(255), INTEGER) RETURNS INTEGER AS $$
 DECLARE
 	id INTEGER := 0;
 	idUser ALIAS FOR $1;
 	nomUser ALIAS FOR $2;
 	prenomUser ALIAS FOR $3;
 	mailUser ALIAS FOR $4;
-	idProfil ALIAS FOR $5;
-	type ALIAS FOR $6;
+	type ALIAS FOR $5;
+	idProfil ALIAS FOR $6;
 BEGIN
-	INSERT INTO gestionLogin.Utilisateurs VALUES (idUser, nomUser, prenomUser, mailUser, idProfil, type) RETURNING id_utilisateur INTO id;
+	INSERT INTO gestionLogin.Utilisateurs (id_utilisateur, nom, prenom, mail, type, id_profil) VALUES (idUser, nomUser, prenomUser, mailUser, type, idProfil) RETURNING id_utilisateur INTO id;
 	RETURN id;
 END;
 
