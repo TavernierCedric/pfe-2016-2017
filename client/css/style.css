@@ -171,3 +171,9 @@ p{
 	height:2vw;
 	border-radius:4px;
 }
+
+.erreur {
+			color:red;
+			border:3px;
+			font-weight: bold;
+	}
