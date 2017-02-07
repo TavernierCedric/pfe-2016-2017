@@ -2,6 +2,7 @@ DROP SCHEMA gestionLogin CASCADE;
 
 CREATE SCHEMA gestionLogin;
 
+CREATE SEQUENCE gestionLogin.pk_utilisateurs;
 CREATE SEQUENCE gestionLogin.pk_profils;
 CREATE SEQUENCE gestionLogin.pk_logiciels;
 
@@ -12,7 +13,7 @@ CREATE TABLE gestionLogin.Profils (
 );
 
 CREATE TABLE gestionLogin.Utilisateurs (
-	id_utilisateur INTEGER PRIMARY KEY,
+	id_utilisateur INTEGER PRIMARY KEY DEFAULT NEXTVAL ('gestionLogin.pk_utilisateurs'),
 	matricule INTEGER UNIQUE,
 	nom VARCHAR (255) NOT NULL,
 	prenom VARCHAR(255) NOT NULL,
@@ -131,6 +132,65 @@ END;
 
 $$ LANGUAGE plpgsql;
 
+/**
+ * @Return 0 si non trouve
+ * @Return >0 si trouve
+*/
+
+CREATE OR REPLACE FUNCTION gestionLogin.connexionAdmin(VARCHAR(255),VARCHAR(255)) RETURNS INTEGER AS $$
+DECLARE
+	id_c INTEGER := 0;
+	login_c ALIAS FOR $1;
+	mdp_c ALIAS FOR $2;
+BEGIN
+	SELECT u.id_utilisateur INTO id_c FROM gestionLogin.Utilisateurs u, gestionLogin.Utilisateurs_Logiciels ul, gestionLogin.Logiciels l 
+				WHERE u.id_utilisateur = ul.id_utilisateur AND ul.id_logiciel = l.id_logiciel
+					AND u.login LIKE login_c AND ul.mdp LIKE mdp_c
+					AND l.nom LIKE 'GLOBAL';
+	RETURN id_c;
+END;
+$$ LANGUAGE plpgsql;
+
+/**
+ * @Return null si matricule inexistant
+ * @Return nom,prenom,profil,appli1,mdp1,appli2,mdp2, ...
+*/
+
+CREATE OR REPLACE FUNCTION gestionLogin.informationEtudiant(INTEGER) RETURNS text as $$
+DECLARE
+	matricule_c ALIAS FOR $1;
+	retour text;
+	profil_c VARCHAR(255);
+	test record;
+	inutile RECORD;
+	retour_vide VARCHAR(255) := 'null';
+BEGIN
+	
+	SELECT u.nom, u.prenom INTO test FROM gestionLogin.Utilisateurs u, gestionLogin.Profils p 
+			WHERE u.matricule = matricule_c AND u.id_profil = p.id_profil;
+	SELECT p.nom INTO profil_c FROM gestionLogin.Utilisateurs u, gestionLogin.Profils p 
+			WHERE u.matricule = matricule_c AND u.id_profil = p.id_profil;
+
+	-- Si matricule non trouve
+	IF (test IS NULL) THEN
+		RETURN retour_vide;
+	END IF;
+
+	retour := test.nom || ',' || test.prenom || ',' || profil_c;
+	
+	FOR inutile IN (SELECT l.nom , ul.mdp FROM gestionLogin.Utilisateurs u, gestionLogin.Profils p, gestionLogin.Logiciels l, 
+											gestionLogin.Profils_Logiciels pl, gestionLogin.Utilisateurs_Logiciels ul 
+										WHERE p.id_profil = u.id_profil AND p.id_profil = pl.id_profil
+										AND l.id_logiciel = pl.id_logiciel AND u.id_utilisateur = ul.id_utilisateur
+										AND l.id_logiciel = ul.id_logiciel AND u.matricule = matricule_c) LOOP
+		retour := retour || ',' || inutile.nom || ',' || inutile.mdp;
+
+	END LOOP;
+
+	RETURN retour;
+
+END;
+$$ LANGUAGE plpgsql;
 
 
 
