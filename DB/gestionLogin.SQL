@@ -132,14 +132,12 @@ END;
 
 $$ LANGUAGE plpgsql;
 
-<<<<<<< HEAD
+
 /**
  * @Return 0 si non trouve
  * @Return >0 si trouve
 */
 
-=======
->>>>>>> origin/master
 CREATE OR REPLACE FUNCTION gestionLogin.connexionAdmin(VARCHAR(255),VARCHAR(255)) RETURNS INTEGER AS $$
 DECLARE
 	id_c INTEGER := 0;
@@ -154,7 +152,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-<<<<<<< HEAD
 /**
  * @Return null si matricule inexistant
  * @Return nom,prenom,profil,appli1,mdp1,appli2,mdp2, ...
@@ -195,8 +192,6 @@ BEGIN
 
 END;
 $$ LANGUAGE plpgsql;
-=======
->>>>>>> origin/master
 
 
 
