@@ -42,6 +42,10 @@ CREATE TABLE gestionLogin.Utilisateurs_Logiciels (
 	PRIMARY KEY (id_utilisateur, id_logiciel)
 );
 
+/*******************
+		VUES
+*******************/
+
 -- VUE POUR CLAROLINE VERS CSV
 CREATE VIEW gestionLogin.clarolineVersCSV(nom, prenom, mail, mdp) AS 
 	SELECT u.nom, u.prenom, u.mail, ul.mdp
@@ -66,11 +70,21 @@ CREATE VIEW gestionLogin.nutrilogVersCSV(id, nom, prenom, mdp) AS
 	AND pl.id_logiciel = l.id_logiciel AND u.id_utilisateur = ul.id_utilisateur 
 	AND ul.id_logiciel = l.id_logiciel AND u.type = 'Etudiant';
 
--- Gestion des Logiciels
 
--- AJOUT D'UN LOGICIEL
 
-CREATE OR REPLACE FUNCTION gestionLogin.ajoutLogiciel(VARCHAR(255)) RETURNS INTEGER AS $$
+/*******************
+	FONCTIONS
+*******************/
+
+/**
+ * Inserer un logiciel
+ * @Param nom
+ *
+ * @Return 0 si erreur lors de l'insertion
+ * @Return >0 si insertion reussie
+*/
+
+CREATE OR REPLACE FUNCTION gestionLogin.insererLogiciel(VARCHAR(255)) RETURNS INTEGER AS $$
 DECLARE
 	nom_logiciel ALIAS FOR $1;
 	id INTEGER := 0;
@@ -81,9 +95,14 @@ END;
 
 $$ LANGUAGE plpgsql;
 
--- SUPPRESSION D'UNE APPLICATION
+/**
+ * Supprimer un logiciel
+ * @Param nom
+ *
+ * @Return 1
+*/
 
-CREATE OR REPLACE FUNCTION gestionLogin.suppressionLogiciel(VARCHAR(255)) RETURNS INTEGER AS $$
+CREATE OR REPLACE FUNCTION gestionLogin.supprimerLogiciel(VARCHAR(255)) RETURNS INTEGER AS $$
 DECLARE
 	nom_logiciel ALIAS FOR $1;
 BEGIN
@@ -96,11 +115,35 @@ END;
 
 $$ LANGUAGE plpgsql;
 
--- MODIFIER LOGICIEL
+/**
+ * Modifier un profil
+ * @Param nom
+ *
+ * @Return 0 si non trouve
+ * @Return >0 si trouve
+*/
+
+CREATE OR REPLACE FUNCTION gestionLogin.modifierLogiciel(VARCHAR(255)) RETURNS INTEGER AS $$
+DECLARE
+	nom_logiciel ALIAS FOR $1;
+	id_retour INTEGER := 0;
+BEGIN
+	UPDATE gestionLogin.Logiciels
+	SET nom = nom_logiciel
+	WHERE nom = nom_logiciel RETURNING id_logiciel INTO id_retour;
+
+	RETURN id_retour;
+END;
+$$ LANGUAGE plpgsql;
 
 
-
--- INSERTION PROFIL
+/**
+ * Inserer un profil
+ * @Param nom
+ *
+ * @Return 0 si erreur lors de l'insertion
+ * @Return >0 si insertion reussie
+*/
 
 CREATE OR REPLACE FUNCTION gestionLogin.insererProfil(VARCHAR(255)) RETURNS INTEGER AS $$
 DECLARE
@@ -113,7 +156,13 @@ END;
 
 $$ LANGUAGE plpgsql;
 
--- INSERTION UTILISATEUR
+/**
+ * Inserer un utilisateur
+ * @Param matricule , nom, prenom, mail, type, login, id du profil lie
+ *
+ * @Return 0 si erreur lors de l'insertion
+ * @Return >0 si insertion reussie
+*/
 
 CREATE OR REPLACE FUNCTION gestionLogin.insererUtilisateur(INTEGER, VARCHAR(255), VARCHAR(255), VARCHAR(255), VARCHAR(255), VARCHAR(255), INTEGER) RETURNS INTEGER AS $$
 DECLARE
@@ -134,6 +183,9 @@ $$ LANGUAGE plpgsql;
 
 
 /**
+ * Verifier la connexion d'un admin
+ * @Param login , mot de passe
+ *
  * @Return 0 si non trouve
  * @Return >0 si trouve
 */
@@ -153,6 +205,9 @@ END;
 $$ LANGUAGE plpgsql;
 
 /**
+ * Renvoyer les informations de l'etudiant
+ * @Param matricule de l'etudiant
+ *
  * @Return null si matricule inexistant
  * @Return nom,prenom,profil,appli1,mdp1,appli2,mdp2, ...
 */
@@ -192,7 +247,6 @@ BEGIN
 
 END;
 $$ LANGUAGE plpgsql;
-
 
 
 
