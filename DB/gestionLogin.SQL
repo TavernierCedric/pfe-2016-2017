@@ -8,22 +8,24 @@ CREATE SEQUENCE gestionLogin.pk_logiciels;
 
 CREATE TABLE gestionLogin.Profils (
 	id_profil INTEGER PRIMARY KEY DEFAULT NEXTVAL ('gestionLogin.pk_profils'), 
-	nom VARCHAR(255) NOT NULL
+	nom VARCHAR(255) UNIQUE NOT NULL
 );
 
 CREATE TABLE gestionLogin.Utilisateurs (
 	id_utilisateur INTEGER PRIMARY KEY,
+	matricule INTEGER UNIQUE,
 	nom VARCHAR (255) NOT NULL,
 	prenom VARCHAR(255) NOT NULL,
 	mail VARCHAR(255) UNIQUE,
 	type VARCHAR(255) NOT NULL CHECK(type LIKE 'Etudiant' OR type LIKE 'Prof' OR type LIKE 'Admin' OR type LIKE 'Invite'),
+	login VARCHAR(255) UNIQUE NOT NULL,
 	id_profil INTEGER NOT NULL REFERENCES gestionLogin.Profils(id_profil)
 );
 
 
 CREATE TABLE gestionLogin.Logiciels (
 	id_logiciel INTEGER PRIMARY KEY DEFAULT NEXTVAL ('gestionLogin.pk_logiciels'),
-	nom VARCHAR(255) NOT NULL
+	nom VARCHAR(255) UNIQUE NOT NULL
 );
 
 CREATE TABLE gestionLogin.Profils_Logiciels (
@@ -84,9 +86,9 @@ CREATE OR REPLACE FUNCTION gestionLogin.suppressionLogiciel(VARCHAR(255)) RETURN
 DECLARE
 	nom_logiciel ALIAS FOR $1;
 BEGIN
-	DELETE FROM gestionLogin.Profils_Logiciels pl USING gestionLogin.Logiciels a WHERE a.id_logiciel = pl.id_logiciel AND a.nom = nom_logiciel;
-	DELETE FROM gestionLogin.Utilisateurs_Logiciels ul USING gestionLogin.Logiciels a WHERE a.id_logiciel = ul.id_logiciel AND a.nom = nom_logiciel;
-	DELETE FROM gestionLogin.Logiciels l WHERE l.nom = nom_logiciel;
+	DELETE FROM gestionLogin.Profils_Logiciels pl USING gestionLogin.Logiciels a WHERE a.id_logiciel = pl.id_logiciel AND a.nom LIKE nom_logiciel;
+	DELETE FROM gestionLogin.Utilisateurs_Logiciels ul USING gestionLogin.Logiciels a WHERE a.id_logiciel = ul.id_logiciel AND a.nom LIKE nom_logiciel;
+	DELETE FROM gestionLogin.Logiciels l WHERE l.nom LIKE nom_logiciel;
 
   	RETURN 1;
 END;
@@ -112,17 +114,17 @@ $$ LANGUAGE plpgsql;
 
 -- INSERTION UTILISATEUR
 
-CREATE OR REPLACE FUNCTION gestionLogin.insererUtilisateur(INTEGER, VARCHAR(255), VARCHAR(255), VARCHAR(255), VARCHAR(255), INTEGER) RETURNS INTEGER AS $$
+CREATE OR REPLACE FUNCTION gestionLogin.insererUtilisateur(INTEGER, VARCHAR(255), VARCHAR(255), VARCHAR(255), VARCHAR(255), VARCHAR(255), INTEGER) RETURNS INTEGER AS $$
 DECLARE
 	id INTEGER := 0;
-	idUser ALIAS FOR $1;
+	matriculeUser ALIAS FOR $1;
 	nomUser ALIAS FOR $2;
 	prenomUser ALIAS FOR $3;
 	mailUser ALIAS FOR $4;
 	type ALIAS FOR $5;
 	idProfil ALIAS FOR $6;
 BEGIN
-	INSERT INTO gestionLogin.Utilisateurs (id_utilisateur, nom, prenom, mail, type, id_profil) VALUES (idUser, nomUser, prenomUser, mailUser, type, idProfil) RETURNING id_utilisateur INTO id;
+	INSERT INTO gestionLogin.Utilisateurs (matricule, nom, prenom, mail, type, login, id_profil) VALUES (matriculeUser, nomUser, prenomUser, mailUser, type, login, idProfil) RETURNING id_utilisateur INTO id;
 	RETURN id;
 END;
 
