@@ -8,12 +8,14 @@
   "dependencies": {
     "auth0-api-jwt-rsa-validation": "0.0.1",
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "*",
+    "body-parser": "^1.16.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.14.1",
     "express-jwt": "^5.1.0",
     "express-session": "^1.15.0",
+    "knex": "^0.12.6",
+    "morgan": "^1.8.0",
     "passport": "*",
     "passport-local": "^1.0.0",
     "pg": "^6.1.2",
@@ -22,5 +24,8 @@
   "repository": {
     "type": "git",
     "url": ""
+  },
+  "devDependencies": {
+    "knex": "^0.12.6"
   }
 }

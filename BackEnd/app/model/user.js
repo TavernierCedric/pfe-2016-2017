@@ -1,21 +1,22 @@
-var bcrypt   = require('bcrypt-nodejs');
+var bcrypt   = require('bcrypt-nodejs'),
+    userSchema = {
+        matricule : '',
+        nom : '',
+        prenom : '',
+        annee : '',
+        orientation : '',
+        email : ''
+    }
 
-// define the schema for our user model
-var userSchema = {
-    matricule : '',
-    nom : '',
-    prenom : '',
-    annee : '',
-    orientation : '',
-    email : ''
-};
+// define the export module for our user
+module.exports = {
 
-function generateHash (password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-};
+    generateHash : function(password) {
+        return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+    },
 
-function validPassword (password) {
-    return bcrypt.compareSync(password, this.local.password);
-};
+    validPassword : function(password) {
+        return bcrypt.compareSync(password, this.local.password);
+    }
 
-module.exports = userSchema;
+}

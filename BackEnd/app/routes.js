@@ -1,41 +1,32 @@
-router.post('/', (req, res, next) => {
+module.exports = function (app, passport){
+
+router.post('/test', (req, res, next) => {
   const results = [];
-  // Grab data from http request
   const data = {text: req.body.text, complete: false};
-  // Get a Postgres client from the connection pool
   pg.connect(connectionString, (err, client, done) => {
-    // Handle connection errors
     if(err) {
       done();
       console.log(err);
       return res.status(500).json({success: false, data: err});
     }
-    // SQL Query > Insert Data
-    client.query();
-    // SQL Query > Select Data
-    const query = client.query('');
-    // Stream results back one row at a time
+    client.query('INSERT INTO items(text, complete) values($1, $2)',
+    [data.["No. of interfaces"], data.complete]);
+    const query = client.query('SELECT * FROM items ORDER BY id ASC');
     query.on('row', (row) => {
       results.push(row);
     });
-    // After all data is returned, close connection and return results
     query.on('end', () => {
       done();
       return res.json(results);
     });
   });
-})
-app.post('/signup', passport.authenticate('local-signup', {
-    successRedirect : '/',
-    failureRedirect : '/signup'
-}));
+});
 
-app.post('/login', passport.authenticate('local-signup', {
-    successRedirect : '/',
-    failureRedirect : '/login'
-}));
-
-module.exports = function (app, passport,io){
+  app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
 
      app.post('/login', passport.authenticate('local-login', {
         successRedirect : '/',
@@ -47,8 +38,14 @@ module.exports = function (app, passport,io){
         successRedirect : '/',
         failureRedirect : '/signup'
     }));
-}
 
+  app.post('/test', function (req, res) {
+       console.log("post");
+       var  data = req.body;
+       console.log(data);
+       var table = req.body.data;
+       console.log(table);
+}
 
 function isLogged(req, res, next) {
    if (req.isAuthenticated())

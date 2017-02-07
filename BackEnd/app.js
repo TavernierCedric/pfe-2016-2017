@@ -14,24 +14,27 @@ var express = require('express');
     server = http.createServer(app),
     User = require('./app/model/user')
 
+app.use(cookieParser());
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
 var configDB = require('./config/database.js');
 var router = express.Router();
     pg = require('pg');
-    connectionString = 'postgres://postgres:xxx@localhost:5432/pfe'
+    connectionString = 'postgres://postgres:12lersoubo@localhost:5432/pfe'
 var client = new pg.Client(connectionString);
 client.connect();
 
-
+app.use(bodyParser());
 app.use(session({ secret: '4a1l23k6rt$$' }));
 app.use(passport.initialize());
 app.use(passport.session()); 
 app.use(flash()); 
 
 require('./config/passport')(passport);
-require('./app/routes.js');
+require('./app/routes.js')(app, passport);
 
   pg.connect(connectionString, (err, client, done) => {
-    // Handle connection errors
     if(err) {
       done();
       console.log(err);
@@ -39,7 +42,6 @@ require('./app/routes.js');
     }else{
         console.log('Successfully connected to local database');
     }
-    });
+});
 
-server.listen(port);
-console.log('Listening  to  port ' + port);
+server.listen(8080);
