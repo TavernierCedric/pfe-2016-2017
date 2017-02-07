@@ -15,8 +15,8 @@ CREATE TABLE gestionLogin.Utilisateurs (
 	id_utilisateur INTEGER PRIMARY KEY,
 	nom VARCHAR (255) NOT NULL,
 	prenom VARCHAR(255) NOT NULL,
-	mail VARCHAR(255) NOT NULL UNIQUE,
-	type VARCHAR(255) NOT NULL CHECK(type LIKE 'Etudiant' OR type LIKE 'Prof' OR type LIKE 'Admin' OR type LIKE 'Visiteur'),
+	mail VARCHAR(255) UNIQUE,
+	type VARCHAR(255) NOT NULL CHECK(type LIKE 'Etudiant' OR type LIKE 'Prof' OR type LIKE 'Admin' OR type LIKE 'Invite'),
 	id_profil INTEGER NOT NULL REFERENCES gestionLogin.Profils(id_profil)
 );
 
