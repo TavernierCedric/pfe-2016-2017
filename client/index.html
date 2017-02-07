@@ -4,9 +4,6 @@
 	<head>
 		<title>Gestion De Logins</title>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-		<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-		<script type="text/javascript" src="scripts/myScript.js"></script>
 	</head> 
 	<body>
 		<div id="banner">
@@ -14,17 +11,44 @@
 			<div id="boutonConnexion"> Connexion </div>
 		</div>
 
-		<div id="accueil">	
+		<!-- Affichage données -->
+		<div id="accueil" style="visibility:visible;">
+			<a id="close_accueil" style="text-align: right;left: 49%;position: relative;color: red;">X</a>
 			<h1 id="titre_accueil">Feuille de login</h1>
-			<div id="recuperationFeuille">
+
+<br>
+<br>
+<br>
+			<p>Nom : Denuit</p>
+			<p>Prenom : Maxime</p>
+			<p>Login : 1032</p>
+			<p>Profil : 3BIN</p>
+<br>
+			<p>Logiciel : Windows</p>
+			<p>Mdp : Test12345n</p>
+<br>
+			<p>Logiciel : Claroline</p>
+			<p>Mdp : Test2421414l</p>
+<br>
+			<p>Logiciel : Nutrilog</p>
+			<p>Mdp : Test2434132525k</p>
+
+
+
+			<!-- Demande des données du matricule donnée -->
+			<div id="recuperationFeuille" style="visibility:hidden;position:absolute;">
 				<form>
 					<h1 style="padding-top:2vw;">Matricule</h1>
 					<input style="margin-top:2vw;margin-bottom:2vw;width:15vw;height:2vw; font-size:1.3vw; text-align:center;" type="text"/>
-					<div id="bouton">Récuperer</div>
+					<div id="bouton">Recuperer</div>
 				</form>
 			</div>
+
+
 
 		</div>
 
 	</body>
+	<script type="text/javascript" src="scripts/jquery-3.1.1.js"></script>
+	<script type="text/javascript" src="scripts/myScript.js"></script>
 </html>

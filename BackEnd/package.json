@@ -7,10 +7,15 @@
   "license": "ISC",
   "dependencies": {
     "auth0-api-jwt-rsa-validation": "0.0.1",
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "*",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
     "express": "^4.14.1",
     "express-jwt": "^5.1.0",
+    "express-session": "^1.15.0",
     "passport": "*",
+    "passport-local": "^1.0.0",
     "pg": "^6.1.2",
     "pg-promise": "^5.5.6"
   },
