@@ -39,14 +39,36 @@ app.post('/test2', (req, res, next) => {
         failureRedirect : '/signup'
     }));
 
-  app.post('/test', function (req, res) {
+  app.post('/matricule', function (req, res) {
+       console.log("post");
+       var matricule = req.body.matricule;
+       /* recupere le sql en fct du matrile et le renvoyer en json 
+       */
+      
+       console.log(matricule);
+       res.json(matricule)
+  });
+app.post('/connexion', function (req, res) {
+       console.log("post");
+       var table = req.body;
+       console.log(table);
+       if(table.login=="test"&&table.mdp=="1234")
+       res.json("reussis");
+  });
+  app.post('/deconnexion', function (req, res) {
+       console.log("post");
+       var table = req.body;
+       console.log(table);       
+       res.json("reussis");
+  });
+  /* csv inser en fct du csv */
+  app.post('/csv', function (req, res) {
        console.log("post");
        var  data = req.body;
        console.log(data);
        var table = req.body.data;
        console.log(table);
   });
-
 }
 
 function isLogged(req, res, next) {

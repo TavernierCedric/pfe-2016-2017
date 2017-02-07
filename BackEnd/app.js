@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 var configDB = require('./config/database.js');
 var router = express.Router();
     pg = require('pg');
-    connectionString = 'postgres://postgres:12lersoubo@localhost:5432/pfe';
+    connectionString = 'postgres://postgres:272824@localhost:5432/pfe';
     client = new pg.Client(connectionString);
 client.connect();
 
