@@ -209,7 +209,7 @@ $$ LANGUAGE plpgsql;
  * @Param matricule de l'etudiant
  *
  * @Return null si matricule inexistant
- * @Return nom,prenom,profil,appli1,mdp1,appli2,mdp2, ...
+ * @Return matricule,nom,prenom,mail,profil,login,logic1,mdp1,logic2,mdp2, ...
 */
 
 CREATE OR REPLACE FUNCTION gestionLogin.informationEtudiant(INTEGER) RETURNS text as $$
@@ -222,7 +222,7 @@ DECLARE
 	retour_vide VARCHAR(255) := 'null';
 BEGIN
 	
-	SELECT u.nom, u.prenom INTO info_u FROM gestionLogin.Utilisateurs u, gestionLogin.Profils p 
+	SELECT u.matricule, u.nom, u.prenom, u.mail, u.login INTO info_u FROM gestionLogin.Utilisateurs u, gestionLogin.Profils p 
 			WHERE u.matricule = matricule_c AND u.id_profil = p.id_profil;
 	SELECT p.nom INTO profil_c FROM gestionLogin.Utilisateurs u, gestionLogin.Profils p 
 			WHERE u.matricule = matricule_c AND u.id_profil = p.id_profil;
@@ -232,7 +232,7 @@ BEGIN
 		RETURN retour_vide;
 	END IF;
 
-	retour := info_u.nom || ',' || info_u.prenom || ',' || profil_c;
+	retour := info_u.matricule || ',' || info_u.nom || ',' || info_u.prenom || ',' || info_u.mail || ',' || profil_c || ',' || info_u.login;
 	
 	FOR info_l IN (SELECT l.nom , ul.mdp FROM gestionLogin.Utilisateurs u, gestionLogin.Profils p, gestionLogin.Logiciels l, 
 											gestionLogin.Profils_Logiciels pl, gestionLogin.Utilisateurs_Logiciels ul 
