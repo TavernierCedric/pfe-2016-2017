@@ -121,10 +121,11 @@ DECLARE
 	nomUser ALIAS FOR $2;
 	prenomUser ALIAS FOR $3;
 	mailUser ALIAS FOR $4;
-	type ALIAS FOR $5;
-	idProfil ALIAS FOR $6;
+	typeUser ALIAS FOR $5;
+	loginUser ALIAS FOR $6;
+	idProfil ALIAS FOR $7;
 BEGIN
-	INSERT INTO gestionLogin.Utilisateurs (matricule, nom, prenom, mail, type, login, id_profil) VALUES (matriculeUser, nomUser, prenomUser, mailUser, type, login, idProfil) RETURNING id_utilisateur INTO id;
+	INSERT INTO gestionLogin.Utilisateurs (matricule, nom, prenom, mail, type, login, id_profil) VALUES (matriculeUser, nomUser, prenomUser, mailUser, typeUser, loginUser, idProfil) RETURNING id_utilisateur INTO id;
 	RETURN id;
 END;
 
