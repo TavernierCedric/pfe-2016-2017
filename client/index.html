@@ -4,51 +4,82 @@
 	<head>
 		<title>Gestion De Logins</title>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
-	</head> 
-	<body>
-		<div id="banner">
-			<p id="titre"> Gestion de Logins </p>
-			<div id="boutonConnexion"> Connexion </div>
-		</div>
+	</head>
+	<body> 
+		<div id="firstBody">
+			<div id="banner">
+				<p id="titre"> Gestion de Logins </p>
+				<div id="boutonConnexion"> Connexion </div>
+			</div>
 
-		<!-- Affichage données -->
-		<div id="accueil" style="visibility:visible;">
-			<a id="close_accueil" style="text-align: right;left: 49%;position: relative;color: red;">X</a>
-			<h1 id="titre_accueil">Feuille de login</h1>
-
-<br>
-<br>
-<br>
-			<p>Nom : Denuit</p>
-			<p>Prenom : Maxime</p>
-			<p>Login : 1032</p>
-			<p>Profil : 3BIN</p>
-<br>
-			<p>Logiciel : Windows</p>
-			<p>Mdp : Test12345n</p>
-<br>
-			<p>Logiciel : Claroline</p>
-			<p>Mdp : Test2421414l</p>
-<br>
-			<p>Logiciel : Nutrilog</p>
-			<p>Mdp : Test2434132525k</p>
-
-
-
-			<!-- Demande des données du matricule donnée -->
-			<div id="recuperationFeuille" style="visibility:hidden;position:absolute;">
-				<form>
-					<h1 style="padding-top:2vw;">Matricule</h1>
-					<input style="margin-top:2vw;margin-bottom:2vw;width:15vw;height:2vw; font-size:1.3vw; text-align:center;" type="text"/>
-					<div id="bouton">Recuperer</div>
-				</form>
+			<!-- Affichage données -->
+			<div id="accueil" style="visibility:hidden;">
+				<a id="close_accueil" style="text-align: right;left: 49%;position: relative;color: red;">X</a>
+				<h1 id="titre_accueil">Feuille de login</h1>
+				<br>
+				<br>
+				<br>
+				<p>Nom : Denuit</p>
+				<p>Prenom : Maxime</p>
+				<p>Login : 1032</p>
+				<p>Profil : 3BIN</p>
+				<br>
+				<p>Logiciel : Windows</p>
+				<p>Mdp : Test12345n</p>
+				<br>
+				<p>Logiciel : Claroline</p>
+				<p>Mdp : Test2421414l</p>
+				<br>
+				<p>Logiciel : Nutrilog</p>
+				<p>Mdp : Test2434132525k</p>
 			</div>
 
 
 
+				<!-- Demande des données du matricule donnée -->
+				<div id="recuperationFeuille" style="visibility:visible;position:absolute;text-align:center;">
+					<form>
+						<h1 style="padding-top:2vw;">Matricule</h1>
+						<input id="matricule" style="margin-top:2vw;margin-bottom:2vw;width:15vw;height:2vw; font-size:1.3vw; text-align:center;" type="text"/></p>
+						<p id="test"></p>
+
+						<div id="bouton">Recuperer</div>
+					</form>
+				</div>
+				<div id="hide" style="text-align:center;position:fixed;visibility:hidden;width:100%;height:100%;background-color:rgba(0,0,0,0.3);top:0px;left:0px;">
+					<div id="connexion" style="position:fixed;width:40%;height:30vw;background-color:white;margin-top:12%;margin-left:30%;box-shadow: 0px 0px 3px gray;">
+						<h1 style="margin-left:37%;">Connexion <a id="closeConnexionButton" style="margin-left:45%;color:red;">X</a></h1>
+						<p id="error"></p>
+						<p>Login
+						<input id="login" style="margin-top:2vw;margin-bottom:2vw;width:15vw;height:2vw; font-size:1.3vw; text-align:center;" type="text"/></p>
+						<p>Mot de passe
+						<input id="mdp" style="margin-top:2vw;margin-bottom:2vw;width:15vw;height:2vw; font-size:1.3vw; text-align:center;" type="text"/></p>
+						<div id="connexionbouton">Se connecter</div>
+					</div>
+				</div>
+
+
+
+			</div>
+
 		</div>
 
+		<div id="secondBody" style="position:fixed;visibility:hidden;top:0;left:0;width:100%;">
+			<div id="banner">
+				<p id="titre"> Gestion de Logins </p>
+				<div id="boutonDec"> Deconnexion </div>
+			</div>
+
+			<div id="accueil">
+				<h1 id="titre_accueil">Accueil administrateur</h1>
+				<input type="file" id="fichierCSV"/>
+				<button id="csvdownloader">Upload</button>
+			</div>
+		</div>
 	</body>
+
 	<script type="text/javascript" src="scripts/jquery-3.1.1.js"></script>
 	<script type="text/javascript" src="scripts/myScript.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+
 </html>
