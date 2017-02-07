@@ -20,7 +20,7 @@ p{
 }
 
 #titre {
-	position: :relative;
+	position:relative;
 	color:white;
 	font-size: 3.5vw;
 	margin-left:37%;
@@ -171,3 +171,9 @@ p{
 	height:2vw;
 	border-radius:4px;
 }
+
+.erreur {
+			color:red;
+			border:3px;
+			font-weight: bold;
+	}

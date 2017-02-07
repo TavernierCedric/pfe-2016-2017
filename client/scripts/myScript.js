@@ -28,7 +28,10 @@ $('#bouton').click(function() {
           $('#matricule').val(JSON.stringify(data));
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            alert(jqXHR + " " + errorThrown + " " + textStatus);
+            console.log(jqXHR + " " + errorThrown + " " + textStatus);
+            $('.erreur').remove();
+            $('#bouton').before('<div class="erreur" >'+errorThrown+'</div>');
+
         }
     });
 });
@@ -70,7 +73,10 @@ $('#connexionbouton').click(function() {
 	  			$("#secondBody").css("visibility","visible");
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            alert(jqXHR + " " + errorThrown + " " + textStatus);
+            console.log(jqXHR + " " + errorThrown + " " + textStatus);
+            $('.erreur').remove();
+            $('#connexionbouton').before('<div class="erreur" >'+errorThrown+'</div>');
+
         }
     });
 });
@@ -94,7 +100,10 @@ $('#boutonDec').click(function() {
         $("#secondBody").css("visibility","visible");
       },
       error: function(jqXHR, textStatus, errorThrown) {
-        alert(jqXHR + " " + errorThrown + " " + textStatus);
+        console.log(jqXHR + " " + errorThrown + " " + textStatus);
+        //$('.erreur').remove();
+        //$('#connexionbouton').before('<div class="erreur" >'+errorThrown+'</div>');
+
       }
   });
 
