@@ -43,7 +43,7 @@ CREATE TABLE gestionLogin.Utilisateurs_Logiciels (
 );
 
 /*******************
-		VUES
+*		VUES       *
 *******************/
 
 -- VUE POUR CLAROLINE VERS CSV
@@ -73,7 +73,7 @@ CREATE VIEW gestionLogin.nutrilogVersCSV(id, nom, prenom, mdp) AS
 
 
 /*******************
-	FONCTIONS
+*	 FONCTIONS     *
 *******************/
 
 /**
@@ -217,29 +217,29 @@ DECLARE
 	matricule_c ALIAS FOR $1;
 	retour text;
 	profil_c VARCHAR(255);
-	test record;
-	inutile RECORD;
+	info_u record;
+	info_l RECORD;
 	retour_vide VARCHAR(255) := 'null';
 BEGIN
 	
-	SELECT u.nom, u.prenom INTO test FROM gestionLogin.Utilisateurs u, gestionLogin.Profils p 
+	SELECT u.nom, u.prenom INTO info_u FROM gestionLogin.Utilisateurs u, gestionLogin.Profils p 
 			WHERE u.matricule = matricule_c AND u.id_profil = p.id_profil;
 	SELECT p.nom INTO profil_c FROM gestionLogin.Utilisateurs u, gestionLogin.Profils p 
 			WHERE u.matricule = matricule_c AND u.id_profil = p.id_profil;
 
 	-- Si matricule non trouve
-	IF (test IS NULL) THEN
+	IF (info_u IS NULL) THEN
 		RETURN retour_vide;
 	END IF;
 
-	retour := test.nom || ',' || test.prenom || ',' || profil_c;
+	retour := info_u.nom || ',' || info_u.prenom || ',' || profil_c;
 	
-	FOR inutile IN (SELECT l.nom , ul.mdp FROM gestionLogin.Utilisateurs u, gestionLogin.Profils p, gestionLogin.Logiciels l, 
+	FOR info_l IN (SELECT l.nom , ul.mdp FROM gestionLogin.Utilisateurs u, gestionLogin.Profils p, gestionLogin.Logiciels l, 
 											gestionLogin.Profils_Logiciels pl, gestionLogin.Utilisateurs_Logiciels ul 
 										WHERE p.id_profil = u.id_profil AND p.id_profil = pl.id_profil
 										AND l.id_logiciel = pl.id_logiciel AND u.id_utilisateur = ul.id_utilisateur
 										AND l.id_logiciel = ul.id_logiciel AND u.matricule = matricule_c) LOOP
-		retour := retour || ',' || inutile.nom || ',' || inutile.mdp;
+		retour := retour || ',' || info_l.nom || ',' || info_l.mdp;
 
 	END LOOP;
 
