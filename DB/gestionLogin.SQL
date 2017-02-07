@@ -84,7 +84,7 @@ CREATE VIEW gestionLogin.nutrilogVersCSV(id, nom, prenom, mdp) AS
  * @Return >0 si insertion reussie
 */
 
-CREATE OR REPLACE FUNCTION gestionLogin.insererLogiciel(VARCHAR(255)) RETURNS INTEGER AS $$
+CREATE OR REPLACE FUNCTION gestionLogin.ajoutLogiciel(VARCHAR(255)) RETURNS INTEGER AS $$
 DECLARE
 	nom_logiciel ALIAS FOR $1;
 	id INTEGER := 0;
@@ -102,7 +102,7 @@ $$ LANGUAGE plpgsql;
  * @Return 1
 */
 
-CREATE OR REPLACE FUNCTION gestionLogin.supprimerLogiciel(VARCHAR(255)) RETURNS INTEGER AS $$
+CREATE OR REPLACE FUNCTION gestionLogin.suppressionLogiciel(VARCHAR(255)) RETURNS INTEGER AS $$
 DECLARE
 	nom_logiciel ALIAS FOR $1;
 BEGIN
