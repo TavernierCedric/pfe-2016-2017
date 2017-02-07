@@ -24,11 +24,26 @@ router.post('/connexion', function(req, res) {
       }   
   });
 });
+  router.post('/login', passport.authenticate('local-login', {
+        successRedirect : '/',
+        failureRedirect : '/login'
+    }));
 
-router.post('/test', function(req, res) {
-  console.log("test")
-  res.json("test");
-});
+
+    router.post('/signup', passport.authenticate('local-signup', {
+        successRedirect : '/',
+        failureRedirect : '/signup'
+    }));
+
+  router.post('/matricule', function (req, res) {
+       console.log("post");
+       var matricule = req.body.matricule;
+       /* recupere le sql en fct du matrile et le renvoyer en json 
+       */
+      
+       console.log(matricule);
+       res.json(matricule)
+  });
 
 router.post('/profil', function(req, res) {
 
