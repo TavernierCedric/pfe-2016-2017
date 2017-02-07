@@ -1,22 +1,24 @@
-// Update with your config settings.
+var databaseName = 'pfe';
 
 module.exports = {
-
-  developement: {
+  development: {
     client: 'postgresql',
-    connection: {
-      database: '127.0.0.1:5432/pfe',
-      user:     'poluchon',
-      password: '12lersoubo'
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
+    connection: `postgres://localhost:5432/${databaseName}`,
     migrations: {
-      tableName: 'knex_migrations'
+      directory: __dirname + '/migrations'
+    },
+    seeds: {
+      directory: __dirname + '/seeds'
+    }
+  },
+  test: {
+    client: 'postgresql',
+    connection: `postgres://localhost:5432/${databaseName}_test`,
+    migrations: {
+      directory: __dirname + '/migrations'
+    },
+    seeds: {
+      directory: __dirname + '/seeds'
     }
   }
-
-
 };

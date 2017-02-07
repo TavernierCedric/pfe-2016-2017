@@ -1,6 +1,6 @@
 module.exports = function (app, passport){
 
-router.post('/test', (req, res, next) => {
+app.post('/test2', (req, res, next) => {
   const results = [];
   const data = {text: req.body.text, complete: false};
   pg.connect(connectionString, (err, client, done) => {
@@ -10,7 +10,7 @@ router.post('/test', (req, res, next) => {
       return res.status(500).json({success: false, data: err});
     }
     client.query('INSERT INTO items(text, complete) values($1, $2)',
-    [data.["No. of interfaces"], data.complete]);
+    [data.text, data.complete]);
     const query = client.query('SELECT * FROM items ORDER BY id ASC');
     query.on('row', (row) => {
       results.push(row);
@@ -45,6 +45,8 @@ router.post('/test', (req, res, next) => {
        console.log(data);
        var table = req.body.data;
        console.log(table);
+  });
+
 }
 
 function isLogged(req, res, next) {

@@ -1,8 +1,7 @@
-var express = require('express');
+var express = require('express'),
     app = express(),
     port = process.env.PORT || 8080,
     pg = require('pg'),
-    pgp = require('pg-promise'),
     passport = require('passport'),
     flash = require('connect-flash'),
     cookieParser = require('cookie-parser'),
@@ -21,8 +20,8 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 var configDB = require('./config/database.js');
 var router = express.Router();
     pg = require('pg');
-    connectionString = 'postgres://postgres:12lersoubo@localhost:5432/pfe'
-var client = new pg.Client(connectionString);
+    connectionString = 'postgres://postgres:12lersoubo@localhost:5432/pfe';
+    client = new pg.Client(connectionString);
 client.connect();
 
 app.use(bodyParser());
@@ -31,7 +30,7 @@ app.use(passport.initialize());
 app.use(passport.session()); 
 app.use(flash()); 
 
-require('./config/passport')(passport);
+//require('./config/passport')(passport);
 require('./app/routes.js')(app, passport);
 
   pg.connect(connectionString, (err, client, done) => {
