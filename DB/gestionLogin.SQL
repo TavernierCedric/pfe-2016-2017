@@ -131,6 +131,20 @@ END;
 
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION gestionLogin.connexionAdmin(VARCHAR(255),VARCHAR(255)) RETURNS INTEGER AS $$
+DECLARE
+	id_c INTEGER := 0;
+	login_c ALIAS FOR $1;
+	mdp_c ALIAS FOR $2;
+BEGIN
+	SELECT u.id_utilisateur INTO id_c FROM gestionLogin.Utilisateurs u, gestionLogin.Utilisateurs_Logiciels ul, gestionLogin.Logiciels l 
+				WHERE u.id_utilisateur = ul.id_utilisateur AND ul.id_logiciel = l.id_logiciel
+					AND u.login LIKE login_c AND ul.mdp LIKE mdp_c
+					AND l.nom LIKE 'GLOBAL';
+	RETURN id_c;
+END;
+$$ LANGUAGE plpgsql;
+
 
 
 
