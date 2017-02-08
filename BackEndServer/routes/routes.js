@@ -189,27 +189,36 @@ router.post('/utilisateursprof', function (req, res) {
   var prenom = req.body.prenom;
   var type = req.body.type;
   var profil = req.body.name;
-  var login = prenom.substring(0, 1) + nom.substring(0, 6);
-  var idProfil;
-  var mail=req.body.mail
-  models.sequelize.query('SELECT id_profil from profils where nom like ?',
-    { replacements: [profil], type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
-      if (err) {
-        throw err
-      } else {
-        idProfil = data[0].id_profil;
-        var query = 'INSERT INTO Utilisateurs (id_utilisateur, nom, prenom,mail, type, login, id_profil) VALUES (DEFAULT,?,?,?,?,?,?)';
-        models.sequelize.query(query, { replacements: [nom, prenom,mail, type, login, idProfil], type: models.sequelize.QueryTypes.INSERT }).then(function (data, err) {
-          if (err) {
-            throw err;
-          } else {
-            res.json(
-              data[0])
-          }
-        });
-      }
-    })
+    console.log(type)
+  if (type == "Prof") {
+    var login = prenom.substring(0, 1) + nom.substring(0, 6);
+    var idProfil;
+    var mail = req.body.mail
+    models.sequelize.query('SELECT id_profil from profils where nom like ?',
+      { replacements: [profil], type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
+        if (err) {
+          throw err
+        } else {
+          idProfil = data[0].id_profil;
+          var query = 'INSERT INTO Utilisateurs (id_utilisateur, nom, prenom,mail, type, login, id_profil) VALUES (DEFAULT,?,?,?,?,?,?)';
+          models.sequelize.query(query, { replacements: [nom, prenom, mail, type, login, idProfil], type: models.sequelize.QueryTypes.INSERT }).then(function (data, err) {
+            if (err) {
+              throw err;
+            } else {
+              res.json(
+                data[0])
+            }
+          });
+        }
+      })
+  }
+  else{
+    res.status(403).send({
+      success: false,
+      message: 'vous n\'est pas un prof'
+    });
 
+  }
 });
 
 
@@ -281,29 +290,29 @@ router.post('/nutrilog', function (req, res) {
     }
   });
 });
-router.post('/profilslogiciel',function(req,res){
-  var profil=req.body.name;
-    console.log(req.body)
-  var query='select l.nom from gestionLogin.Profils p, gestionLogin.Profils_Logiciels pl, gestionLogin.Logiciels l where p.id_profil = pl.id_profil AND l.id_logiciel = pl.id_logiciel AND p.nom LIKE ?';
-  models.sequelize.query(query, { replacements: [profil], type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
-    if (err) {
-      throw err;
-    } else {
-            console.log(data[0])
-      res.json(data[0]);
-    }
-  });
-})
-router.post('/profilslogicielupdate',function(req,res){
-  var profil=req.body.name;
-  console.log(profil)
-  var query='select l.nom from gestionLogin.Profils p, gestionLogin.Profils_Logiciels pl, gestionLogin.Logiciels l where p.id_profil = pl.id_profil AND l.id_logiciel = pl.id_logiciel AND p.nom LIKE ?';
+router.post('/profilslogiciel', function (req, res) {
+  var profil = req.body.name;
+  console.log(req.body)
+  var query = 'select l.nom from gestionLogin.Profils p, gestionLogin.Profils_Logiciels pl, gestionLogin.Logiciels l where p.id_profil = pl.id_profil AND l.id_logiciel = pl.id_logiciel AND p.nom LIKE ?';
   models.sequelize.query(query, { replacements: [profil], type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
     if (err) {
       throw err;
     } else {
       console.log(data[0])
-      res.json(data[0]);
+      res.json(data);
+    }
+  });
+})
+router.post('/profilslogicielupdate', function (req, res) {
+  var profil = req.body.name;
+  console.log(profil)
+  var query = 'select l.nom from gestionLogin.Profils p, gestionLogin.Profils_Logiciels pl, gestionLogin.Logiciels l where p.id_profil = pl.id_profil AND l.id_logiciel = pl.id_logiciel AND p.nom LIKE ?';
+  models.sequelize.query(query, { replacements: [profil], type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
+    if (err) {
+      throw err;
+    } else {
+      console.log(data[0])
+      res.json(data);
     }
   });
 })
