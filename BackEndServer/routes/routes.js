@@ -1,17 +1,21 @@
 var express = require('express');
     router = express.Router();
     models = require('../models/index');
+    jwt    = require('jsonwebtoken'),
 
 router.post('/connexion', function(req, res) {
 
-  models.utilisateurs.findOne({where: {login: req.body.login}}).then(function(err, user) {
+  models.sequelize.query('SELECT utilisateurs_logiciels.mdp, utilisateurs.login FROM utilisateurs AS utilisateurs, utilisateurs_logiciels AS utilisateurs_logiciels WHERE utilisateurs_logiciels.id_utilisateur = utilisateurs.id_utilisateur ' 
++'AND utilisateurs.login = ?',
+  { replacements: [req.body.login], type: models.sequelize.QueryTypes.SELECT }
+).then(function(user,err) {
 
     if (err) throw err;
 
     if (!user) {
       res.json({ success: false, message: 'Authentication failed. User not found.' });
     }else {
-        var token = jwt.sign(user, app.get('superSecret'), {
+        var token = app.jwt.sign(user, app.app.get('superSecret'), {
           expiresInMinutes: 1440 // expires in 24 hours
         });
 
