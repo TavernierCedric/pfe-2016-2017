@@ -24,16 +24,6 @@ router.post('/connexion', function(req, res) {
       }   
   });
 });
-  router.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/',
-        failureRedirect : '/login'
-    }));
-
-
-    router.post('/signup', passport.authenticate('local-signup', {
-        successRedirect : '/',
-        failureRedirect : '/signup'
-    }));
 
   router.post('/matricule', function (req, res) {
        console.log("post");
@@ -67,6 +57,29 @@ router.post('/csv', function (req, res) {
        var table = req.body.data;
        console.log(table);
   });
+
+router.use(function(req, res, next) {
+
+  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  if (token) {
+    jwt.verify(token, app.get('superSecret'), function(err, decoded) {      
+      if (err) {
+        return res.json({ success: false, message: 'Failed to authenticate token.' });    
+      } else {
+        req.decoded = decoded;    
+        next();
+      }
+    });
+
+  } else {
+
+    return res.status(403).send({ 
+        success: false, 
+        message: 'No token provided.' 
+    });
+    
+  }
+});
 
 
 module.exports = router;
