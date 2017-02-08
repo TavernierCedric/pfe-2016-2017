@@ -4,7 +4,8 @@ $('#navAccueil').click(function() {
 	$('#recuperationFeuille').css('visibility','visible');
 	$('#gestionUtilisateur').css('visibility','hidden');
 	$('#gestionLogiciel').css('visibility','hidden');
-
+    $('#gestionProfil').css('visibility','hidden');
+    $('#gestionImport').css('visibility','hidden');
 });
 
 $('#navUtilisateurs').click(function() {
@@ -12,6 +13,8 @@ $('#navUtilisateurs').click(function() {
 	$('#gestionUtilisateur').css('visibility','visible');
 	$('#recuperationFeuille').css('visibility','hidden');
 	$('#gestionLogiciel').css('visibility','hidden');
+    $('#gestionProfil').css('visibility','hidden');
+    $('#gestionImport').css('visibility','hidden');
 
 });
 
@@ -20,8 +23,28 @@ $('#navLogiciels').click(function() {
 	$('#gestionLogiciel').css('visibility','visible');
 	$('#gestionUtilisateur').css('visibility','hidden');
 	$('#recuperationFeuille').css('visibility','hidden');
+    $('#gestionProfil').css('visibility','hidden');
+    $('#gestionImport').css('visibility','hidden');
 	getLogiciels();
 });
+
+$('#navProfils').click(function() {
+    nettoyerErreur();
+    $('#gestionProfil').css('visibility','visible');
+    $('#gestionLogiciel').css('visibility','hidden');
+    $('#gestionUtilisateur').css('visibility','hidden');
+    $('#recuperationFeuille').css('visibility','hidden');
+    $('#gestionImport').css('visibility','hidden');
+    getProfils();
+});
+$('#navImport').click(function() {
+    nettoyerErreur();
+    $('#gestionImport').css('visibility','visible');
+    $('#gestionProfil').css('visibility','hidden');
+    $('#gestionLogiciel').css('visibility','hidden');
+    $('#gestionUtilisateur').css('visibility','hidden');
+    $('#recuperationFeuille').css('visibility','hidden');
+})
 
 // DEJA PRESENTE DANS MYSCRIPT A VERIFIER !
 // Gestion matricule
@@ -292,6 +315,19 @@ function chargerSelectProfil(options) {
 	}
 	var nom = $('#nomProfil').find(':selected').val();
 	$('#nomProfil').val(nom);
+}
+
+/**
+    Gestion Import
+*/
+
+// Importer les étudiants 
+$('#formImport').submit(function(e)) {
+    if ( $('#infoImport').val().match(/.+\.(png)$/i) ) {
+        return; // Autorise la soumission
+    }else{
+        e.preventDefault(); // Empeche la soumission
+    }
 }
 
 
