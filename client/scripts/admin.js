@@ -322,13 +322,13 @@ function chargerSelectProfil(options) {
 */
 
 // Importer les étudiants 
-$('#formImport').submit(function(e)) {
-    if ( $('#infoImport').val().match(/.+\.(png)$/i) ) {
+$('#formImport').submit(function(e) {
+    if ( $('#infoImport').val().match(/.+\.(csv)$/i) ) {
         return; // Autorise la soumission
     }else{
         e.preventDefault(); // Empeche la soumission
     }
-}
+});
 
 
 
