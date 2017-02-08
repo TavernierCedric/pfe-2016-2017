@@ -136,7 +136,7 @@ router.post('/profilsdelete', function (req, res) {
 });
 
 router.get('/logiciels', function (req, res) {
-  models.sequelize.query('SELECT * FROM logiciels', { type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
+  models.sequelize.query('SELECT * FROM logiciels l WHERE l.nom NOT LIKE \'GLOBAL\'', { type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
     if (err) {
       throw err;
     } else {
@@ -164,6 +164,7 @@ router.post('/utilisateursinvitee', function (req, res) {
   var profil = req.body.name;
   var login = prenom.substring(0, 1) + nom.substring(0, 6);
   var idProfil;
+    if (type == "Invite") {
   models.sequelize.query('SELECT id_profil from profils where nom like ?',
     { replacements: [profil], type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
       if (err) {
@@ -181,7 +182,13 @@ router.post('/utilisateursinvitee', function (req, res) {
         });
       }
     })
-
+    }
+    else{
+       res.status(403).send({
+      success: false,
+      message: 'vous n\'est pas une personne invité'
+    });
+    }
 });
 
 router.post('/utilisateursprof', function (req, res) {
