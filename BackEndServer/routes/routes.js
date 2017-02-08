@@ -37,14 +37,14 @@ router.post('/deconnexion', function (req, res) {
   });
 
 router.post('/matricule', function (req, res) {
-       console.log("post");
-        models.sequelize.query('SELECT * FROM ',{ replacements: [req.body.login], type: models.sequelize.QueryTypes.SELECT });
-       var matricule = req.body.matricule;
-       /* recupere le sql en fct du matrile et le renvoyer en json 
-       */
-      
-       console.log(matricule);
-       res.json(matricule)
+        models.sequelize.query('SELECT * FROM informationEtudiant(?)',{ replacements: [req.body.matricule], type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
+          if(err){
+             throw err; 
+          }else{
+            res.json(
+              data[0])
+          }
+        });
   });
 
 router.use(function(req, res, next) {
@@ -70,7 +70,70 @@ router.use(function(req, res, next) {
   }
 });
 
-  /* csv inser en fct du csv */
+
+router.post('/profil', function (req, res) {
+    models.profils.findOrCreate({
+      where: {
+        nom: req.body.profil
+      }
+    }).then(function(result) {
+      var profil = result[0],
+        created = result[1]; 
+
+      if (!created) {
+        console.log('Profil already exists');
+        return res.send("profil already exists")
+      }else{
+      console.log('Created author...');
+      res.send("profil created")
+      }
+    });
+
+  });
+
+  router.get('/logiciels', function (req, res) {
+        models.sequelize.query('SELECT * FROM logiciels',{type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
+          if(err){
+             throw err;
+         }else{
+            res.json(
+              data[0])
+          }
+        });
+  });
+
+  router.post('/logiciels', function (req, res) {
+        models.sequelize.query('SELECT * FROM ajoutLogiciel(?)',{ replacements: [req.body.nom],type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
+          if(err){
+             throw err;
+         }else{
+            res.json({ success: true, message: 'delete successful' });
+        }
+      });
+  });
+
+    router.delete('/logiciels', function (req, res) {
+        models.sequelize.query('SELECT * FROM suppressionLogiciel(?)',{ replacements: [req.body.nom],type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
+          if(err){
+             throw err;
+         }else{
+            res.json(
+              data[0])
+          }
+        });
+  });
+      router.put('/logiciels', function (req, res) {
+        models.sequelize.query('SELECT * FROM modifierLogiciel(?)',{ replacements: [req.body.nom],type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
+          if(err){
+             throw err;
+         }else{
+            res.json(
+              data[0])
+          }
+        });
+  });
+
+    /* csv inser en fct du csv */
 router.post('/csv', function (req, res) {
        console.log("post");
        var  data = req.body;
@@ -79,13 +142,15 @@ router.post('/csv', function (req, res) {
        console.log(table);
   });
 
-router.post('/profil', function(req, res) {
 
-  models.profils.findOne({where: {nom: req.body.profil}}).then(function (profils) {
-    console.log(models.sequelize.get('nom'));
-    res.json({ success: true, message: 'profile found '})
+  router.post('/claroline', function (req, res) {
+        models.sequelize.query('SELECT * FROM ajoutLogiciel(?)',{ replacements: [req.body.nom],type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
+          if(err){
+             throw err;
+         }else{
+            res.json({ success: true, message: 'delete successful' });
+        }
+      });
   });
-});
-
 
 module.exports = router;

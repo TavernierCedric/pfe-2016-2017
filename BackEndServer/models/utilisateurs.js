@@ -5,7 +5,8 @@ module.exports = function(sequelize, DataTypes) {
     id_utilisateur: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     matricule: {
       type: DataTypes.INTEGER,

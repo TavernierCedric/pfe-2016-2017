@@ -5,8 +5,8 @@ module.exports = function(sequelize, DataTypes) {
     id_profil: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: "nextval(pk_profils::regclass)",
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true 
     },
     nom: {
       type: DataTypes.STRING,
