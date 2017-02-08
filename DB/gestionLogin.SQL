@@ -156,6 +156,21 @@ END;
 
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION gestionLogin.insererUtilisateur(INTEGER, VARCHAR(255), VARCHAR(255), VARCHAR(255), INTEGER) RETURNS INTEGER AS $$
+DECLARE
+	id INTEGER := 0;
+	nomUser ALIAS FOR $1;
+	prenomUser ALIAS FOR $2;
+	typeUser ALIAS FOR $3;
+	loginUser ALIAS FOR $4;
+	idProfil ALIAS FOR $5;
+BEGIN
+	INSERT INTO gestionLogin.Utilisateurs (nom, prenom, type, login, id_profil) VALUES (nomUser, prenomUser, typeUser, loginUser, idProfil) RETURNING id_utilisateur INTO id;
+	RETURN id;
+END;
+
+$$ LANGUAGE plpgsql;
+
 /**
  * Inserer un utilisateur
  * @Param matricule , nom, prenom, mail, type, login, id du profil lie

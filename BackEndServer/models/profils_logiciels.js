@@ -4,7 +4,7 @@ module.exports = function(sequelize, DataTypes) {
   return sequelize.define('profils_logiciels', {
     id_profil: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      notNull: true,            // won't allow null
       primaryKey: true,
       references: {
         model: 'profils',
@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     id_logiciel: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      notNull: true,            // won't allow null
       references: {
         model: 'logiciels',
         key: 'id_logiciel'

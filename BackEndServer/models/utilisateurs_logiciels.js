@@ -4,7 +4,7 @@ module.exports = function(sequelize, DataTypes) {
   return sequelize.define('utilisateurs_logiciels', {
     id_utilisateur: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      notNull: true,            // won't allow null
       primaryKey: true,
       references: {
         model: 'utilisateurs',
@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     id_logiciel: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      notNull: true,            // won't allow null
       references: {
         model: 'logiciels',
         key: 'id_logiciel'
@@ -21,7 +21,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     mdp: {
       type: DataTypes.STRING,
-      allowNull: false
+      notNull: true,            // won't allow null
     }
   }, {
     tableName: 'utilisateurs_logiciels',

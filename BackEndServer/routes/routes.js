@@ -10,7 +10,7 @@ router.post('/connexion', function(req, res) {
   models.sequelize.query('SELECT utilisateurs_logiciels.mdp, utilisateurs.login FROM utilisateurs AS utilisateurs, utilisateurs_logiciels AS utilisateurs_logiciels WHERE utilisateurs_logiciels.id_utilisateur = utilisateurs.id_utilisateur ' 
 +'AND utilisateurs.login = ?',
   { replacements: [req.body.login], type: models.sequelize.QueryTypes.SELECT }
-).then(function(user,err) {
+).then(function(user,err) { 
     if(err){
       throw err;
     }
