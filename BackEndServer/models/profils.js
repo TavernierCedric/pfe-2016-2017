@@ -4,13 +4,13 @@ module.exports = function(sequelize, DataTypes) {
   return sequelize.define('profils', {
     id_profil: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      notNull: true,            // won't allow null
       primaryKey: true,
       autoIncrement: true 
     },
     nom: {
       type: DataTypes.STRING,
-      allowNull: false
+      notNull: true,            // won't allow null
     }
   }, {
     tableName: 'profils',

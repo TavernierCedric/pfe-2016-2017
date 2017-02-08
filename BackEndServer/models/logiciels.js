@@ -4,13 +4,13 @@ module.exports = function(sequelize, DataTypes) {
   return sequelize.define('logiciels', {
     id_logiciel: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      notNull: true,            // won't allow null
       defaultValue: "nextval(pk_logiciels::regclass)",
       primaryKey: true
     },
     nom: {
       type: DataTypes.STRING,
-      allowNull: false
+      notNull: true,            // won't allow null
     }
   }, {
     tableName: 'logiciels',
