@@ -263,5 +263,85 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+/**
+ * Modifier les logiciels liés à un profil
+ * @Param nomProfil,nomLogiciel1,nomLogiciel2, ...
+ *
+ * @Return 0 si profil inexistant 
+ * @Return 1 si reussite
+ * Ne devrait jamais renvoyer 0 normalement
+*/
+
+CREATE OR REPLACE FUNCTION public.modificationProfilLogiciel(text) RETURNS INTEGER as $$
+DECLARE
+	chaine ALIAS FOR $1;
+	nom_profil text;
+	id_p INTEGER := 0;
+	nom_logiciel VARCHAR(255);
+	info_id RECORD;
+	logiciel_p RECORD;
+	i INTEGER := 2;
+	j INTEGER := 2;
+BEGIN
+	nom_profil := split_part(chaine, ',', 1);
+
+
+	SELECT p.id_profil INTO id_p FROM public.Profils p WHERE lower(p.nom) LIKE lower(nom_profil);
+	
+	IF (id_p IS NULL) THEN
+		RETURN 0;
+	END IF;
+
+	WHILE (i > 1) LOOP
+		nom_logiciel := split_part(chaine, ',', i);
+
+
+		i := i + 1;
+		
+			-- S'il existe je ne fais rien mais je dois tester !
+		IF EXISTS (SELECT p.id_profil, l.id_logiciel FROM public.Profils p, public.Logiciels l, public.Profils_Logiciels pl
+					WHERE p.id_profil = pl.id_profil AND l.id_logiciel = pl.id_logiciel AND l.nom LIKE nom_logiciel AND p.nom LIKE nom_profil) THEN
+					continue; -- je ne fais rien
+		ELSE
+			-- Si il n'existe pas et que le nom logiciel n'est pas vide, je l'ajoute
+			IF (nom_logiciel <> '') THEN 
+				SELECT l.id_logiciel INTO info_id FROM public.Logiciels l WHERE lower(l.nom) LIKE lower(nom_logiciel);
+				INSERT INTO public.Profils_Logiciels VALUES (id_p, info_id.id_logiciel);
+				continue ;
+			END IF;
+		END IF;
+
+		-- On doit maintenant verifier que les logiciels d'avant soient toujours present !
+
+		FOR logiciel_p IN (SELECT l.id_logiciel, l.nom FROM public.Logiciels l, public.Profils p, public.Profils_Logiciels pl
+						WHERE p.id_profil = pl.id_profil AND l.id_logiciel = pl.id_logiciel AND p.id_profil = id_p) LOOP 
+
+			while (j > 1) LOOP
+				nom_logiciel := split_part(chaine, ',', j);
+
+				j := j + 1;
+
+				-- Si bien present je quitte la boucle while
+				IF (nom_logiciel LIKE logiciel_p.nom) THEN
+					j := 2;
+					EXIT;
+				END IF;
+				
+				-- Si le nom logicile est null alors il a d'office ete supprime dans la checkbox
+				IF (nom_logiciel = '') THEN
+					DELETE FROM public.Profils_Logiciels WHERE id_logiciel = logiciel_p.id_logiciel;
+					j := 2;
+					EXIT;
+				END IF;
+
+			END LOOP;
+		END LOOP; -- Fin du FOR
+		i := 0;
+	END LOOP; -- Fin du WHILE 
+
+	RETURN 1;
+END;
+$$ LANGUAGE plpgsql;
+
 
 
