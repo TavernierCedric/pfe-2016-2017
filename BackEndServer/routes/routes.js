@@ -15,9 +15,9 @@ router.post('/connexion', function(req, res) {
       throw err;
     }
     if (!user) {
-      res.json({ success: false, message: 'Authentication failed. User not found.' });
+      return res.json({ success: false, message: 'Authentication failed. User not found.' });
     }else if (!bcrypt.compareSync(req.body.mdp, bcrypt.hashSync(user[0].mdp, bcrypt.genSaltSync(8), null)) ){
-      res.json({ success: false, message: 'Authentication failed. Password is not correct.' });
+      return res.json({ success: false, message: 'Authentication failed. Password is not correct.' });
     }else{
         var token = jwt.sign({ data: user }, 'ilovepfe',{ expiresIn: 60 * 60 });
         res.json({
@@ -71,7 +71,7 @@ router.use(function(req, res, next) {
 });
 
 
-router.post('/profil', function (req, res) {
+router.post('/profils', function (req, res) {
     models.profils.findOrCreate({
       where: {
         nom: req.body.profil
@@ -91,7 +91,55 @@ router.post('/profil', function (req, res) {
 
   });
 
+    router.get('/profils', function (req, res) {
+        models.sequelize.query('SELECT * FROM profils',{type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
+          if(err){
+             throw err;
+         }else{
+            res.json(
+              data[0])
+          }
+        });
+  });
+
+  router.put('profils', function(req, res) {
+  models.profils.find({
+    where: {
+      id: req.body.id
+    }
+  }).then(function(profil) {
+    if(profil){
+      profil.updateAttributes({
+        nom: req.body.nom,
+      }).then(function(todo) {
+        res.send("profil updated");
+      });
+    }
+  });
+});
+
+router.delete('/profils', function(req, res) {
+  models.profils.destroy({
+    where: {
+      nom: req.params.nom
+    }
+  }).then(function(todo) {
+    res.send("profil deleted");
+  });
+});
+
   router.get('/logiciels', function (req, res) {
+        models.sequelize.query('SELECT * FROM logiciels',{type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
+          if(err){
+             throw err;
+         }else{
+            res.json(
+              data[0])
+          }
+        });
+  });
+
+    router.get('/logiciels', function (req, res) {
         models.sequelize.query('SELECT * FROM logiciels',{type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
           if(err){
              throw err;
@@ -144,11 +192,31 @@ router.post('/csv', function (req, res) {
 
 
   router.post('/claroline', function (req, res) {
-        models.sequelize.query('SELECT * FROM ajoutLogiciel(?)',{ replacements: [req.body.nom],type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
+        models.sequelize.query('SELECT * FROM clarolineVersCSV(nom, prenom, mail, mdp)',{ replacements: [req.body.nom,req.body.prenom,req.body.mail,req.body.mdp],type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
           if(err){
              throw err;
          }else{
-            res.json({ success: true, message: 'delete successful' });
+            res.json(data[0]);
+        }
+      });
+  });
+
+    router.post('/windows', function (req, res) {
+        models.sequelize.query('SELECT * FROM windowsVersBAT(nom, prenom, mdp)',{ replacements: [req.body.nom,req.body.prenom,body.mdp],type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
+          if(err){
+             throw err;
+         }else{
+            res.json(data[0]);
+        }
+      });
+  });
+
+    router.post('/nutrilog', function (req, res) {
+        models.sequelize.query('SELECT * FROM nutrilogVersCSV(id, nom, prenom, mdp)',{ replacements: [req.body.id,req.body.nom,req.body.prenom,body.mdp],type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
+          if(err){
+             throw err;
+         }else{
+            res.json(data[0]);
         }
       });
   });
