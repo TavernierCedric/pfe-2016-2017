@@ -91,27 +91,29 @@ router.post('/profils', function (req, res) {
 
   });
 
-    router.get('/profils', function (req, res) {
+    router.get('/profils/', function (req, res) {
         models.sequelize.query('SELECT * FROM profils',{type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
           if(err){
              throw err;
          }else{
             res.json(
-              data[0])
+              data)
           }
         });
   });
 
-  router.put('profils', function(req, res) {
+  
+
+  router.put('/profils', function(req, res) {
   models.profils.find({
     where: {
-      id: req.body.id
+      nom: req.body.nom
     }
   }).then(function(profil) {
     if(profil){
       profil.updateAttributes({
-        nom: req.body.nom,
-      }).then(function(todo) {
+        nom: req.body.nom2,
+      }).then(function(profil) {
         res.send("profil updated");
       });
     }
@@ -121,7 +123,7 @@ router.post('/profils', function (req, res) {
 router.delete('/profils', function(req, res) {
   models.profils.destroy({
     where: {
-      nom: req.params.nom
+      nom: req.body.nom
     }
   }).then(function(todo) {
     res.send("profil deleted");
@@ -134,13 +136,13 @@ router.delete('/profils', function(req, res) {
              throw err;
          }else{
             res.json(
-              data[0])
+              data)
           }
         });
   });
 
-    router.get('/logiciels', function (req, res) {
-        models.sequelize.query('SELECT * FROM logiciels',{type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
+    router.get('/utilisateurs', function (req, res) {
+        models.sequelize.query('SELECT * FROM insererUtilisateur(?,?,?,?,?,?,?)',{ replacements: [req.body.matricule,req.body.nom,req.body.prenom,req.body.mail,req.body.type,req.body.login,req.body.id_profil],type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
           if(err){
              throw err;
          }else{
@@ -150,7 +152,7 @@ router.delete('/profils', function(req, res) {
         });
   });
 
-  router.post('/logiciels', function (req, res) {
+  router.post('/logicielsajout', function (req, res) {
         models.sequelize.query('SELECT * FROM ajoutLogiciel(?)',{ replacements: [req.body.nom],type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
           if(err){
              throw err;
@@ -160,23 +162,21 @@ router.delete('/profils', function(req, res) {
       });
   });
 
-    router.delete('/logiciels', function (req, res) {
-        models.sequelize.query('SELECT * FROM suppressionLogiciel(?)',{ replacements: [req.body.nom],type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
+    router.post('/logicielsdelete', function (req, res) {
+        models.sequelize.query('SELECT * FROM suppressionLogiciel(?)',{ replacements: [req.body.name],type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
           if(err){
              throw err;
          }else{
-            res.json(
-              data[0])
+            res.send("data deleted")
           }
         });
   });
-      router.put('/logiciels', function (req, res) {
-        models.sequelize.query('SELECT * FROM modifierLogiciel(?)',{ replacements: [req.body.nom],type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
+      router.post('/logicielsput', function (req, res) {
+        models.sequelize.query('UPDATE logiciels SET nom=? WHERE nom LIKE ? ',{ replacements: [req.body.nom,req.body.name],type: models.sequelize.QueryTypes.UPDATE }).then(function(data,err){
           if(err){
              throw err;
          }else{
-            res.json(
-              data[0])
+            res.send("data modified")
           }
         });
   });
@@ -192,7 +192,7 @@ router.post('/csv', function (req, res) {
 
 
   router.post('/claroline', function (req, res) {
-        models.sequelize.query('SELECT * FROM clarolineVersCSV(nom, prenom, mail, mdp)',{ replacements: [req.body.nom,req.body.prenom,req.body.mail,req.body.mdp],type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
+        models.sequelize.query('SELECT * FROM clarolineVersCSV(?, ?, ?, ?)',{ replacements: [req.body.nom,req.body.prenom,req.body.mail,req.body.mdp],type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
           if(err){
              throw err;
          }else{
@@ -202,7 +202,7 @@ router.post('/csv', function (req, res) {
   });
 
     router.post('/windows', function (req, res) {
-        models.sequelize.query('SELECT * FROM windowsVersBAT(nom, prenom, mdp)',{ replacements: [req.body.nom,req.body.prenom,body.mdp],type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
+        models.sequelize.query('SELECT * FROM windowsVersBAT(?, ?, ?)',{ replacements: [req.body.nom,req.body.prenom,body.mdp],type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
           if(err){
              throw err;
          }else{
@@ -212,7 +212,7 @@ router.post('/csv', function (req, res) {
   });
 
     router.post('/nutrilog', function (req, res) {
-        models.sequelize.query('SELECT * FROM nutrilogVersCSV(id, nom, prenom, mdp)',{ replacements: [req.body.id,req.body.nom,req.body.prenom,body.mdp],type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
+        models.sequelize.query('SELECT * FROM nutrilogVersCSV(?, ?, ?, ?)',{ replacements: [req.body.id,req.body.nom,req.body.prenom,body.mdp],type: models.sequelize.QueryTypes.SELECT }).then(function(data,err){
           if(err){
              throw err;
          }else{
