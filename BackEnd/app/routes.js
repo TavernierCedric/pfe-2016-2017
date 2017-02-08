@@ -1,6 +1,6 @@
 module.exports = function (app, passport){
 
-app.post('/test2', (req, res, next) => {
+router.post('/test2', (req, res, next) => {
   const results = [];
   const data = {text: req.body.text, complete: false};
   pg.connect(connectionString, (err, client, done) => {
@@ -28,18 +28,18 @@ app.post('/test2', (req, res, next) => {
     next();
   });
 
-     app.post('/login', passport.authenticate('local-login', {
+     router.post('/login', passport.authenticate('local-login', {
         successRedirect : '/',
         failureRedirect : '/login'
     }));
 
 
-    app.post('/signup', passport.authenticate('local-signup', {
+    router.post('/signup', passport.authenticate('local-signup', {
         successRedirect : '/',
         failureRedirect : '/signup'
     }));
 
-  app.post('/matricule', function (req, res) {
+  router.post('/matricule', function (req, res) {
        console.log("post");
        var matricule = req.body.matricule;
        /* recupere le sql en fct du matrile et le renvoyer en json 
@@ -48,21 +48,21 @@ app.post('/test2', (req, res, next) => {
        console.log(matricule);
        res.json(matricule)
   });
-app.post('/connexion', function (req, res) {
+router.post('/connexion', function (req, res) {
        console.log("post");
        var table = req.body;
        console.log(table);
        if(table.login=="test"&&table.mdp=="1234")
        res.json("reussis");
   });
-  app.post('/deconnexion', function (req, res) {
+  router.post('/deconnexion', function (req, res) {
        console.log("post");
        var table = req.body;
        console.log(table);       
        res.json("reussis");
   });
   /* csv inser en fct du csv */
-  app.post('/csv', function (req, res) {
+  router.post('/csv', function (req, res) {
        console.log("post");
        var  data = req.body;
        console.log(data);
