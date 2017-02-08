@@ -4,8 +4,7 @@ var express = require('express');
 
 router.post('/connexion', function(req, res) {
 
-  // find the user
-  models.utilisateurs.findOne(req.body.login).then(function(err, user) {
+  models.utilisateurs.findOne({where: {login: req.body.login}}).then(function(err, user) {
 
     if (err) throw err;
 

@@ -7,8 +7,8 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true,
       references: {
-        model: 'null',
-        key: 'null'
+        model: 'utilisateurs',
+        key: 'id_utilisateur'
       }
     },
     id_logiciel: {
