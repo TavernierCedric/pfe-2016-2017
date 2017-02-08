@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Gestion De Login</title>
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+	</head>
+	<body>
+		<div id="firstBody">
+			<div id="banner">
+				<p id="titre"> Gestion de Login </p>
+				<div id="boutonConnexion"> Deconnexion </div>
+			</div>
+
+			<nav>
+			<ul>
+				<li id="navAccueil">Accueil</li>
+				<li id="navUtilisateurs">Utilisateurs</li>
+				<li id="navLogiciels">Logiciels</li>
+				<li id="navProfils">Profils</li>
+				<li id="navImport">Import CSV</li>
+				<li id="navScripts">Scripts</li>
+		</ul>
+		</nav>
+
+				<!-- Demande des données du matricule donnée -->
+		<div id="recuperationFeuille" style="visibility:visible;position:absolute;text-align:center;margin-top:10%">
+			<form>
+				<h2 style="padding-top:2vw;">Matricule</h2>
+				<input id="matricule" style="margin-top:2vw;margin-bottom:2vw;width:15vw;height:2vw; font-size:1.3vw; text-align:center;" type="text"/></p>
+				<p id="test"></p>
+
+				<div id="bouton">Recuperer</div>
+			</form>
+		</div>
+				
+		<!-- UTILISATEURS -->
+		<div id="gestionUtilisateur" style="visibility:hidden;position:absolute;text-align:center;margin-top:10%">
+			<form id="formUtilisateur">
+				<h2 style="padding-top:2vw;">Inscription utilisateur</h2><br><br>
+
+				<label>Nom : </label>
+					<input name="nom" type="text" required /><br><br>
+				<label>Prenom : </label>
+					<input name="prenom" type="text" required /><br><br>
+				<label>Type : </label>
+					<input type="radio" name="type" value="professeur">  Professeur
+					<input type="radio" name="type" value="invite">  Invite<br><br>
+				<label>Profil :</label>
+					<select name="select">
+						<option value="default">Default</option>
+					</select>
+					<br><br>
+				
+				<input id="boutonUtilisateur" type="submit" value="Valider">
+			</form>
+		</div>
+
+		<!-- LOGICIELS -->
+		<div id="gestionLogiciel" style="visibility:hidden;position:absolute;text-align:center;margin-top:10%">
+		<h2>Logiciels</h2>
+		<br>
+		<label>Tous les logiciels : </label>
+			<select id="logicielSelect" onchange="getLogiciels()">
+			</select>
+		<br><br>
+			<form id="formLogicielA">
+				<label>Nom : </label>
+					<input id="nomLogiciel" name="nom" type="text" required/><br><br>
+				
+				<input id="boutonLogicielModifier" type="submit" value="Modifier">
+				<input id="boutonLogicielSupprimer" type="submit" value="Supprimer">
+			</form>
+		<br><br>
+			<form id="formLogicielB">
+				<h4>Enregistrer nouveau Logiciel</h4><br>
+
+				<label>Nom : </label>
+					<input name="nom" type="text" required /><br><br>
+				
+				
+				<input id="boutonLogicielEnregistrer" type="submit" value="Enregistrer">
+			</form>
+		</div>
+
+		<!-- PROFILS -->
+		<div id="gestionProfil" style="visibility:hidden;position:absolute;text-align:center;margin-top:10%">
+		<h2>Profils</h2>
+		<label>Tous les profils : </label>
+			<select id="profilSelect" onchange="getProfils()">
+			</select>
+		<br><br>
+			<form id="formProfilA">
+				<label>Nom : </label>
+					<input id="nomProfil" name="nom" type="text" required/><br><br>
+				
+				<input id="boutonProfilModifier" type="submit" value="Modifier">
+				<input id="boutonProfilSupprimer" type="submit" value="Supprimer">
+			</form>
+		<br><br>
+			<form id="formProfilB">
+				<h4>Enregistrer nouveau profil</h4><br>
+
+				<label>Nom : </label>
+					<input name="nom" type="text" required /><br><br>
+				
+				<input id="boutonProfilEnregistrer" type="submit" value="Enregistrer">
+			</form>
+		</div>
+
+		</div> <!-- DIV FIN FIRST BODY-->
+
+	</body>
+
+	<script type="text/javascript" src="scripts/jquery-3.1.1.js"></script>
+	<script type="text/javascript" src="scripts/myScript.js"></script>
+	<script type="text/javascript" src="scripts/admin.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+</html>
