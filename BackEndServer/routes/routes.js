@@ -38,6 +38,7 @@ router.post('/deconnexion', function (req, res) {
 
 router.post('/matricule', function (req, res) {
        console.log("post");
+        models.sequelize.query('SELECT * FROM ',{ replacements: [req.body.login], type: models.sequelize.QueryTypes.SELECT });
        var matricule = req.body.matricule;
        /* recupere le sql en fct du matrile et le renvoyer en json 
        */
