@@ -38,7 +38,10 @@ router.post('/connexion', function (req, res) {
         token: token
       });
     }
-  });
+  }).catch(function (err) {
+    console.log("user not found")
+    res.json({ success: false, message: 'Authentication failed. User not found.' });
+});
 });
 
 router.post('/deconnexion', function (req, res) {
@@ -189,7 +192,7 @@ router.post('/csv', function (req, res) {
   });
 
   router.get('/profils/', function (req, res) {
-    models.sequelize.query('SELECT * FROM profils', { type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
+    models.sequelize.query('SELECT * FROM profils where nom NOT LIKE ?', {  replacements: ['Admin'], type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
       if (err) {
         throw err;
       } else {
@@ -350,7 +353,7 @@ router.post('/csv', function (req, res) {
   });
 
 
-  router.post('/windows', function (req, res) {
+  router.get('/windows', function (req, res) {
     models.sequelize.query('SELECT * FROM windowsVersBAT', {type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
       if (err) {
         throw err;
@@ -360,7 +363,7 @@ router.post('/csv', function (req, res) {
     });
   });
 
-  router.post('/nutrilog', function (req, res) {
+  router.get('/nutrilog', function (req, res) {
     models.sequelize.query('SELECT * FROM nutrilogVersCSV', {type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
       if (err) {
         throw err;
@@ -370,7 +373,7 @@ router.post('/csv', function (req, res) {
     });
   });
 
-  router.post('/claroline', function (req, res) {
+  router.get('/claroline', function (req, res) {
     models.sequelize.query('SELECT * FROM clarolineVersCSV', {type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
       if (err) {
         throw err;
