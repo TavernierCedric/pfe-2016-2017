@@ -80,8 +80,9 @@ $('#closeConnexionButton').click(function() {
 });
 
 // Connexion d'un admin
-$('#connexionbouton').click(function() {
-
+$('#connexionbouton').click(function(event) {
+  $('#error').html("");
+  event.preventDefault();
   var maData = { login : $('#login').val(), mdp : $('#mdp').val()};
   $.ajax({
         url: address+"/connexion",
@@ -93,11 +94,16 @@ $('#connexionbouton').click(function() {
         timeout: 5000,
         data: JSON.stringify(maData),
         success: function(data) {
+          if(data.success){
             localStorage.setItem('token', data.token);
-            document.location.href="admin.html"
+            document.location.href="admin.html";
+          }
+          else{
+            $('#error').html("Donnees recues inconnues");
+          }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            alert(jqXHR + " " + errorThrown + " " + textStatus);
+            $('#error').html("Donnees recues inconnues");
         }
     });
 });

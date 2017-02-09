@@ -45,7 +45,7 @@
 			<div id="recuperationFeuille" style="visibility:visible;position:absolute;text-align:center;">
 				<form>
 					<h1 style="padding-top:2vw;">Matricule</h1>
-					<input id="matricule" style="margin-top:2vw;margin-bottom:2vw;width:15vw;height:2vw; font-size:1.3vw; text-align:center;" type="text"/></p>
+					<input id="matricule" style="margin-top:2vw;margin-bottom:2vw;width:15vw;height:2vw; font-size:1.3vw; text-align:center;" type="text" required/></p>
 					<p id="test"></p>
 					<div id="bouton">Recuperer</div>
 				</form>
@@ -62,7 +62,7 @@
 					<label>Mail : </label>
 						<input name="mail" type="text"/><br><br>
 					<label>Type : </label>
-						<input type="radio" name="type" value="Prof">  Professeur
+						<input type="radio" name="type" value="Prof" checked="true">  Professeur
 						<input type="radio" name="type" value="Invite">  Invite<br><br>
 					<label>Profil :</label>
 						<select id="utilisateurSelect" name="select">
@@ -83,7 +83,7 @@
 					<select id="logicielSelect">
 					</select>
 					<label>Nom : </label>
-						<input id="nomLogiciel" name="nom" type="text" required/><br><br>
+						<input id="nomLogiciel" name="nom" type="text"/><br><br>
 						<input id="boutonLogicielModifier" type="submit" value="Modifier">
 						<input id="boutonLogicielSupprimer" type="submit" value="Supprimer">
 				</form>
@@ -106,7 +106,7 @@
 					<select id="profilSelect">
 					</select>
 					<label>Nom : </label>
-						<input id="nomProfil" name="nom" type="text" required/><br><br>
+						<input id="nomProfil" name="nom" type="text"/><br><br>
 					
 					<input id="boutonProfilModifier" type="submit" value="Modifier">
 					<input id="boutonProfilSupprimer" type="submit" value="Supprimer">
@@ -116,7 +116,7 @@
 					<h4>Enregistrer nouveau profil</h4><br>
 
 					<label>Nom : </label>
-						<input name="nom" type="text" required /><br><br>
+						<input name="nom" type="text" required/><br><br>
 					
 					<input id="boutonProfilEnregistrer" type="submit" value="Enregistrer">
 				</form>
