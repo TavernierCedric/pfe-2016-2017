@@ -145,10 +145,10 @@
 			<!-- IMPORT -->
 			<div id="gestionImport" style="visibility:hidden;position:absolute;text-align:center;margin-top:-35vw;margin-left:43vw;">
 				<h2>Importer les etudiants</h2>
-				<form id="formImport">
+				<form id="formImport" action="http://10.0.115.233:8080/csv" method="post">
 					<label>Fichier CSV : </label>
-					<input id="infoImport" type="file" ><br><br>
-					<input id="boutonImport" type="submit" value="Charger fichier">
+					<input id="infoImport" type="file" name="file"><br><br>
+					<input id="boutonImport" type="submit" value="Charger fichier" formmethod="post" formaction="http://10.0.115.233:8080/csv">
 				</form>
 			</div>
 
