@@ -1,9 +1,14 @@
-var bcrypt = require('bcrypt-nodejs');
-var express = require('express'),
+var bcrypt = require('bcrypt-nodejs'),
+  express = require('express'),
   router = express.Router(),
   models = require('../models/index'),
   jwt = require('jsonwebtoken'),
-  server = require('../server')
+  server = require('../server'),
+  csv = require('csv-stream'),
+  fs = require('fs'),
+  request = require('request'),
+  utf8 = require('to-utf-8'),
+  Promise = require('bluebird');
 /*var randomstring = require("randomstring");
 randomstring.generate({
 length: 12,
@@ -50,6 +55,72 @@ router.post('/matricule', function (req, res) {
         data[0])
     }
   });
+});
+
+      /* csv inser en fct du csv */
+router.post('/csv', function (req, res) {
+       var csvStream = csv.createStream();
+       var records = [];
+       fs.createReadStream('importEtudiants2017-01-29.csv').pipe(utf8()).pipe(csvStream)
+         .on('error',function(err){
+            console.error(err);
+    })  
+         .on('data',function(data){
+           records.push(data);
+            console.log(data);
+            var matricule = data['"Matric Info"'].replace(/['"]+/g, '');
+            var nom = data['"Nom Etudiant"'].replace(/['"]+/g, '')
+            nom = nom.replace(/\s+/g, '');
+            var prenom = data['"Prénom Etudiant"'].replace(/['"]+/g, '');
+            var annee = data['"Année"'].replace(/['"]+/g, '');
+            var option = data['"Orientation"'].replace(/['"]+/g, '');
+            var mail = data['"EMail Etudiant 2"'].replace(/['"]+/g, '');
+            var profil = annee.substring(0, 1) + option.substring(0, 3);
+            var login = prenom.substring(0, 1) + nom.substring(0, 6)
+            login=login.toLowerCase();
+            login = login.replace(new RegExp("[òóôõö]", 'g'),"o");
+            login = login.replace(new RegExp("\\s", 'g'),"");
+            login = login.replace(new RegExp("[àáâãäå]", 'g'),"a");
+            loginr = r.replace(new RegExp("æ", 'g'),"ae");
+            login = login.replace(new RegExp("ç", 'g'),"c");
+            login = login.replace(new RegExp("[èéêë]", 'g'),"e");
+            login = login.replace(new RegExp("[ìíîï]", 'g'),"i");
+            login = login.replace(new RegExp("ñ", 'g'),"n");                            
+            login = login.replace(new RegExp("[òóôõö]", 'g'),"o");
+            login = login.replace(new RegExp("œ", 'g'),"oe");
+            login = login.replace(new RegExp("[ùúûü]", 'g'),"u");
+            login = login.replace(new RegExp("[ýÿ]", 'g'),"y");
+            login = login.replace(new RegExp("\\W", 'g'),"");
+            var query1 = 'INSERT INTO profils (nom) SELECT ? WHERE NOT EXISTS (SELECT id_profil FROM utilisateurs WHERE nom LIKE ?) RETURNING id_profil';
+            var  query2 = 'SELECT id_profil from profils WHERE nom LIKE ?'
+            var query3 = 'INSERT INTO utilisateurs (matricule,nom,prenom,login,mail,id_profil,type) SELECT ?,?,?,?,?,?,? WHERE NOT EXISTS (SELECT id_utilisateur FROM utilisateurs WHERE matricule = ?)'
+            var profil;
+            var created;
+            console.log('begin');
+            models.sequelize.sync().then(function() {
+                Promise.all([
+                      models.profils.findOrCreate({
+                        where: {
+                          nom: profil
+                        }
+                      }).then(function(result) {
+                        console.log(result[0].id_profil)
+                          profil = result[0].id_profil,
+                          created = result[1]; 
+                    if (!created) {
+                      console.log('Profil already exists');
+                    }else{
+                      console.log('Created author...');
+                    }
+                  })
+              ]).then(function() {
+                Promise.all([
+                  models.sequelize.query(query3,{ replacements: [matricule,nom,prenom,login,mail,profil,'Etudiant',matricule], type: models.sequelize.QueryTypes.INSERT })
+                  ])
+              })
+            });     
+      });
+
 });
 
 router.use(function (req, res, next) {
@@ -300,7 +371,7 @@ router.post('/nutrilog', function (req, res) {
 router.post('/profilslogiciel', function (req, res) {
   var profil = req.body.name;
   console.log(req.body)
-  var query = 'select l.nom from gestionLogin.Profils p, gestionLogin.Profils_Logiciels pl, gestionLogin.Logiciels l where p.id_profil = pl.id_profil AND l.id_logiciel = pl.id_logiciel AND p.nom LIKE ?';
+  var query = 'select l.nom from public.Profils p, public.Profils_Logiciels pl, public.Logiciels l where p.id_profil = pl.id_profil AND l.id_logiciel = pl.id_logiciel AND p.nom LIKE ?';
   models.sequelize.query(query, { replacements: [profil], type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
     if (err) {
       throw err;
@@ -311,17 +382,27 @@ router.post('/profilslogiciel', function (req, res) {
   });
 })
 router.post('/profilslogicielupdate', function (req, res) {
-  var profil = req.body.name;
+  console.log("logi " + req.body)
+  var profil = req.body.profil;
+  for(var element in req.body.logiciels){
+    profil+=','+req.body.logiciels[element];
+  }
   console.log(profil)
-  var query = 'select l.nom from gestionLogin.Profils p, gestionLogin.Profils_Logiciels pl, gestionLogin.Logiciels l where p.id_profil = pl.id_profil AND l.id_logiciel = pl.id_logiciel AND p.nom LIKE ?';
+  var query = 'select l.nom from public.Profils p, public.Profils_Logiciels pl, public.Logiciels l where p.id_profil = pl.id_profil AND l.id_logiciel = pl.id_logiciel AND p.nom LIKE ?';
   models.sequelize.query(query, { replacements: [profil], type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
     if (err) {
       throw err;
     } else {
-      console.log(data[0])
-      res.json(data);
+          var query = 'Select * from modificationProfilLogiciel(?)';
+          models.sequelize.query(query, { replacements: [profil], type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
+            if (err) {
+              throw err;
+            } else {
+              res.send("success")
+            }
+          });
     }
-  });
-})
+ });
+});
 
 module.exports = router;
