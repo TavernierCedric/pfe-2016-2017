@@ -6,123 +6,157 @@
 	</head>
 	<body>
 		<div id="firstBody">
+			<!-- Header -->
 			<div id="banner">
 				<p id="titre"> Gestion de Login </p>
-				<div id="boutonConnexion"> Deconnexion </div>
+				<div id="boutonDec"> Deconnexion </div>
 			</div>
 
+			<!-- Menu navigation -->
 			<nav>
-			<ul>
-				<li id="navAccueil">Accueil</li>
-				<li id="navUtilisateurs">Utilisateurs</li>
-				<li id="navLogiciels">Logiciels</li>
-				<li id="navProfils">Profils</li>
-				<li id="navImport">Import CSV</li>
-				<li id="navScripts">Scripts</li>
-		</ul>
-		</nav>
+				<ul>
+					<li id="navAccueil">Accueil</li>
+					<li id="navUtilisateurs">Utilisateurs</li>
+					<li id="navLogiciels">Logiciels</li>
+					<li id="navProfils">Profils</li>
+					<li id="navProLog">ProfilsLogiciels</li>
+					<li id="navImport">Import CSV</li>
+					<li id="navScripts">Scripts</li>
+				</ul>
+			</nav>
 
-				<!-- Demande des données du matricule donnée -->
-		<div id="recuperationFeuille" style="visibility:visible;position:absolute;text-align:center;margin-top:10%">
-			<form>
-				<h2 style="padding-top:2vw;">Matricule</h2>
-				<input id="matricule" style="margin-top:2vw;margin-bottom:2vw;width:15vw;height:2vw; font-size:1.3vw; text-align:center;" type="text"/></p>
-				<p id="test"></p>
-
-				<div id="bouton">Recuperer</div>
-			</form>
-		</div>
+			<!-- Affichage matricule -->
+			<div id="accueil" style="visibility:hidden;">
+				<a id="close_accueil">X</a>
+				<h1 id="titre_accueil">Feuille de login</h1>
+				<div id="infoMatricule">
+					<p id="matriculeID"></p>
+					<p id="matriculeNom"></p>
+					<p id="matriculePrenom"></p>
+					<p id="matriculeMail"></p>
+					<p id="matriculeProfil"></p>
+					<p id="matriculeLogin"></p>
+					<ul id="matriculeLogiciels">
+					</ul>
+				</div>	
+			</div>
+			
+			<!-- Demande des données du matricule donnée -->
+			<div id="recuperationFeuille" style="visibility:visible;position:absolute;text-align:center;">
+				<form>
+					<h1 style="padding-top:2vw;">Matricule</h1>
+					<input id="matricule" style="margin-top:2vw;margin-bottom:2vw;width:15vw;height:2vw; font-size:1.3vw; text-align:center;" type="text"/></p>
+					<p id="test"></p>
+					<div id="bouton">Recuperer</div>
+				</form>
+			</div>
 				
-		<!-- UTILISATEURS -->
-		<div id="gestionUtilisateur" style="visibility:hidden;position:absolute;text-align:center;margin-top:10%">
-			<form id="formUtilisateur">
-				<h2 style="padding-top:2vw;">Inscription utilisateur</h2><br><br>
+			<!-- UTILISATEURS -->
+			<div id="gestionUtilisateur" style="visibility:hidden;position:absolute;text-align:center;margin-top:-35vw;margin-left:43vw;">
+				<form id="formUtilisateur">
+					<h2 style="padding-top:2vw;">Inscription utilisateur</h2><br><br>
+					<label>Nom : </label>
+						<input name="nom" type="text" required /><br><br>
+					<label>Prenom : </label>
+						<input name="prenom" type="text" required /><br><br>
+					<label>Mail : </label>
+						<input name="mail" type="text"/><br><br>
+					<label>Type : </label>
+						<input type="radio" name="type" value="Prof">  Professeur
+						<input type="radio" name="type" value="Invite">  Invite<br><br>
+					<label>Profil :</label>
+						<select id="utilisateurSelect" name="select">
+							<option value="default">Default</option>
+						</select>
+						<br><br>
+					<input id="boutonUtilisateur" type="submit" value="Valider">
+				</form>
+			</div>
 
-				<label>Nom : </label>
-					<input name="nom" type="text" required /><br><br>
-				<label>Prenom : </label>
-					<input name="prenom" type="text" required /><br><br>
-				<label>Type : </label>
-					<input type="radio" name="type" value="professeur">  Professeur
-					<input type="radio" name="type" value="invite">  Invite<br><br>
-				<label>Profil :</label>
-					<select name="select">
-						<option value="default">Default</option>
+			<!-- LOGICIELS -->
+			<div id="gestionLogiciel" style="visibility:hidden;position:absolute;text-align:center;margin-top:-35vw;margin-left:43vw;">
+				<h2>Logiciels</h2>
+				<br>
+				<label>Tous les logiciels : </label>
+				<br><br>
+				<form id="formLogicielA">
+					<select id="logicielSelect">
 					</select>
-					<br><br>
-				
-				<input id="boutonUtilisateur" type="submit" value="Valider">
-			</form>
-		</div>
+					<label>Nom : </label>
+						<input id="nomLogiciel" name="nom" type="text" required/><br><br>
+						<input id="boutonLogicielModifier" type="submit" value="Modifier">
+						<input id="boutonLogicielSupprimer" type="submit" value="Supprimer">
+				</form>
+				<br><br>
+				<form id="formLogicielB">
+					<h4>Enregistrer nouveau Logiciel</h4><br>
+					<label>Nom : </label>
+						<input name="nom" type="text" required /><br><br>
+						<input id="boutonLogicielEnregistrer" type="submit" value="Enregistrer">
+				</form>
+			</div>
 
-		<!-- LOGICIELS -->
-		<div id="gestionLogiciel" style="visibility:hidden;position:absolute;text-align:center;margin-top:10%">
-		<h2>Logiciels</h2>
-		<br>
-		<label>Tous les logiciels : </label>
-			<select id="logicielSelect" onchange="getLogiciels()">
-			</select>
-		<br><br>
-			<form id="formLogicielA">
-				<label>Nom : </label>
-					<input id="nomLogiciel" name="nom" type="text" required/><br><br>
-				
-				<input id="boutonLogicielModifier" type="submit" value="Modifier">
-				<input id="boutonLogicielSupprimer" type="submit" value="Supprimer">
-			</form>
-		<br><br>
-			<form id="formLogicielB">
-				<h4>Enregistrer nouveau Logiciel</h4><br>
+			<!-- PROFILS -->
+			<div id="gestionProfil" style="visibility:hidden;position:absolute;text-align:center;margin-top:-35vw;margin-left:43vw;">
+				<h2>Profils</h2>
+				<label>Tous les profils : </label>
+		
+				<br><br>
+				<form id="formProfilA">
+					<select id="profilSelect">
+					</select>
+					<label>Nom : </label>
+						<input id="nomProfil" name="nom" type="text" required/><br><br>
+					
+					<input id="boutonProfilModifier" type="submit" value="Modifier">
+					<input id="boutonProfilSupprimer" type="submit" value="Supprimer">
+				</form>
+				<br><br>
+				<form id="formProfilB">
+					<h4>Enregistrer nouveau profil</h4><br>
 
-				<label>Nom : </label>
-					<input name="nom" type="text" required /><br><br>
-				
-				
-				<input id="boutonLogicielEnregistrer" type="submit" value="Enregistrer">
-			</form>
-		</div>
+					<label>Nom : </label>
+						<input name="nom" type="text" required /><br><br>
+					
+					<input id="boutonProfilEnregistrer" type="submit" value="Enregistrer">
+				</form>
+			</div>
 
-		<!-- PROFILS -->
-		<div id="gestionProfil" style="visibility:hidden;position:absolute;text-align:center;margin-top:10%">
-		<h2>Profils</h2>
-		<label>Tous les profils : </label>
-			<select id="profilSelect" onchange="getProfils()">
-			</select>
-		<br><br>
-			<form id="formProfilA">
-				<label>Nom : </label>
-					<input id="nomProfil" name="nom" type="text" required/><br><br>
-				
-				<input id="boutonProfilModifier" type="submit" value="Modifier">
-				<input id="boutonProfilSupprimer" type="submit" value="Supprimer">
-			</form>
-		<br><br>
-			<form id="formProfilB">
-				<h4>Enregistrer nouveau profil</h4><br>
+			<!-- PROFILS LOGICIELS -->
+			<div id="gestionProfilLogiciel" style="visibility:hidden;position:absolute;text-align:center;margin-top:-35vw;margin-left:43vw;">
+				<h2>ProfilsLogiciels</h2>
+				<label>Tous les profils : </label>
+		
+				<br><br>
+				<form id="formProfilLogiciel">
+					<select id="profilLogicielSelect">
+					</select>
+					<input id="boutonProfilLogicielEnvoyer" type="submit" value="Envoyer">
+				</form>
+				<br>
+				<p>Liste des logiciels</p>
+				<br>
+				<form id = "listeLogiciels">
+				</form>
+				<input id="boutonProfilLogicielChanger" type="submit" value="Changer">
 
-				<label>Nom : </label>
-					<input name="nom" type="text" required /><br><br>
-				
-				<input id="boutonProfilEnregistrer" type="submit" value="Enregistrer">
-			</form>
-		</div>
+			</div>
 
-		<!-- IMPORT -->
-		<div id="gestionImport" style="visibility:hidden;position:absolute;text-align:center;margin-top:10%">
-			<h2>Importer les etudiants</h2>
-			<form id="formImport">
-				<label>Fichier CSV : </label>
-				<input id="infoImport" type="file" ><br><br>
-				<input id="boutonImport" type="submit" value="Charger fichier">
-			</form>
-		</div>
+			<!-- IMPORT -->
+			<div id="gestionImport" style="visibility:hidden;position:absolute;text-align:center;margin-top:-35vw;margin-left:43vw;">
+				<h2>Importer les etudiants</h2>
+				<form id="formImport">
+					<label>Fichier CSV : </label>
+					<input id="infoImport" type="file" ><br><br>
+					<input id="boutonImport" type="submit" value="Charger fichier">
+				</form>
+			</div>
 
 		</div> <!-- DIV FIN FIRST BODY-->
 
 	</body>
 
 	<script type="text/javascript" src="scripts/jquery-3.1.1.js"></script>
-	<script type="text/javascript" src="scripts/myScript.js"></script>
 	<script type="text/javascript" src="scripts/admin.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
 </html>
