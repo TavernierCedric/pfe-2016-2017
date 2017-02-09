@@ -346,5 +346,41 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+/**
+ * Insere un mot de passe pour chaque logiciel correspondant au profil
+ * @Param id_utilisateur, id_profil, mdp
+ *
+ * @Return 0 si erreur lors de l'insert ou profil non lie a l'etudiant
+ * @Return 1 si reussite
+*/
+
+CREATE OR REPLACE FUNCTION public.insererMotDePasse(INTEGER, INTEGER, VARCHAR(255)) RETURNS INTEGER AS $$
+DECLARE
+	id_uti ALIAS FOR $1;
+	id_prof ALIAS FOR $2;
+	mot_de_passe ALIAS FOR $3;
+	id_logic INTEGER := 0;
+BEGIN
+
+	IF NOT EXISTS (SELECT * FROM public.Utilisateurs u WHERE u.id_utilisateur = id_uti AND u.id_profil = id_prof) THEN
+		RETURN 0; -- Utilisateur non lie a ce profil !
+	END IF;
+
+	FOR id_logic IN (SELECT pl.id_logiciel FROM public.Profils p , public.Profils_Logiciels pl WHERE p.id_profil = pl.id_profil AND p.id_profil = id_prof ) LOOP
+
+		INSERT INTO public.Utilisateurs_Logiciels VALUES (id_uti, id_logic, mot_de_passe);	
+
+		IF NOT FOUND THEN
+			RETURN 0;
+		END IF;
+
+	END LOOP;
+
+	RETURN 1;
+
+END;
+
+$$ LANGUAGE plpgsql;
+
 
 
