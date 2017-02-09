@@ -47,6 +47,11 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id_profil'
       }
     }
+    /*isExported: { 
+      type: DataTypes.BOOLEAN, 
+      allowNull: false, 
+      def
+    */
   }, {
     tableName: 'utilisateurs',
     timestamps: false
