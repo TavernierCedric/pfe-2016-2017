@@ -41,23 +41,6 @@ router.post('/connexion', function (req, res) {
   });
 });
 
-router.post('/claroline', function (req, res) {
-  var ws = fs.createWriteStream('export.csv');
-  var columns = ['id_profil', 'id_utilisateur', 'product_lvel', 'month_year', 'metric_name', 'val'];
-  var query = models.sequelize.query('SELECT * FROM clarolineVersCSV', { type: models.sequelize.QueryTypes.SELECT })
-  query.on('row', function (row) {
-    var values = [];
-    columns.forEach(function (col) {
-      values = row[col];
-      console.log("values : " + alues)
-    });
-    ws.write(values.join('| '));
-  });
-  query.on('end', function (result) {
-    ws.close();
-  });
-});
-
 router.post('/deconnexion', function (req, res) {
   console.log("post");
   var table = req.body;
@@ -374,24 +357,35 @@ router.post('/csv', function (req, res) {
 
 
   router.post('/windows', function (req, res) {
-    models.sequelize.query('SELECT * FROM windowsVersBAT(?, ?, ?)', { replacements: [req.body.nom, req.body.prenom, body.mdp], type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
+    models.sequelize.query('SELECT * FROM windowsVersBAT', {type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
       if (err) {
         throw err;
       } else {
-        res.json(data[0]);
+        res.json(data);
       }
     });
   });
 
   router.post('/nutrilog', function (req, res) {
-    models.sequelize.query('SELECT * FROM nutrilogVersCSV(?, ?, ?, ?)', { replacements: [req.body.id, req.body.nom, req.body.prenom, body.mdp], type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
+    models.sequelize.query('SELECT * FROM nutrilogVersCSV', {type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
       if (err) {
         throw err;
       } else {
-        res.json(data[0]);
+        res.json(data);
       }
     });
   });
+
+  router.post('/claroline', function (req, res) {
+    models.sequelize.query('SELECT * FROM clarolineVersCSV', {type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
+      if (err) {
+        throw err;
+      } else {
+        res.json(data);
+      }
+    });
+  });
+
   router.post('/profilslogiciel', function (req, res) {
     var profil = req.body.name;
     var query = 'select l.nom from public.Profils p, public.Profils_Logiciels pl, public.Logiciels l where p.id_profil = pl.id_profil AND l.id_logiciel = pl.id_logiciel AND p.nom LIKE ?';
