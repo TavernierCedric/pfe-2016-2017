@@ -42,9 +42,7 @@ router.post('/connexion', function (req, res) {
 });
 
 router.post('/deconnexion', function (req, res) {
-  console.log("post");
   var table = req.body;
-  console.log(table);
   res.json("reussis");
 });
 
@@ -53,7 +51,6 @@ router.post('/matricule', function (req, res) {
     if (err) {
       throw err;
     } else {
-      console.log(data[0]);
       res.json(
         data[0])
     }
@@ -111,13 +108,12 @@ router.post('/csv', function (req, res) {
             nom: profilData
           }
         }).then(function (result) {
-          console.log(result[0].id_profil)
           profil = result[0].id_profil,
             created = result[1];
           if (!created) {
             console.log('Profil already exists');
           } else {
-            console.log('Created author...');
+            console.log('Created profil...');
           }
         })
       ]).then(function () {
@@ -133,13 +129,12 @@ router.post('/csv', function (req, res) {
               type: 'Etudiant'
             }
           }).then(function (result) {
-            console.log(result[0].id_utilisateur)
             user = result[0].id_utilisateur,
               created = result[1];
             if (!created) {
-              console.log('Profil already exists');
+              console.log('user already exists');
             } else {
-              console.log('Created author...');
+              console.log('Created user...');
             }
           })
         ]).then(function () {
@@ -186,7 +181,7 @@ router.post('/csv', function (req, res) {
         console.log('Profil already exists');
         return res.send("profil already exists")
       } else {
-        console.log('Created author...');
+        console.log('profil author...');
         res.send("profil created")
       }
     });
@@ -293,7 +288,6 @@ router.post('/csv', function (req, res) {
     var prenom = req.body.prenom;
     var type = req.body.type;
     var profil = req.body.name;
-    console.log(type)
     if (type == "Prof") {
       var login = prenom.substring(0, 1) + nom.substring(0, 6);
       var idProfil;
@@ -402,7 +396,6 @@ router.post('/csv', function (req, res) {
     for (var attributename in req.body.logiciels) {
       profil += ',' + req.body.logiciels[attributename]
     }
-    console.log(profil)
     var query = 'select l.nom from public.Profils p, public.Profils_Logiciels pl, public.Logiciels l where p.id_profil = pl.id_profil AND l.id_logiciel = pl.id_logiciel AND p.nom LIKE ?';
     models.sequelize.query(query, { replacements: [profil], type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
       if (err) {
