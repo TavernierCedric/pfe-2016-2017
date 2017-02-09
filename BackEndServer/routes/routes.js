@@ -65,6 +65,9 @@ router.post('/csv', function (req, res) {
          .on('error',function(err){
             console.error(err);
     })  
+         .on('end',function(){
+            res.send("csv import complete")
+         })
          .on('data',function(data){
            records.push(data);
             console.log(data);
@@ -81,7 +84,7 @@ router.post('/csv', function (req, res) {
             login = login.replace(new RegExp("[òóôõö]", 'g'),"o");
             login = login.replace(new RegExp("\\s", 'g'),"");
             login = login.replace(new RegExp("[àáâãäå]", 'g'),"a");
-            loginr = r.replace(new RegExp("æ", 'g'),"ae");
+            login = login.replace(new RegExp("æ", 'g'),"ae");
             login = login.replace(new RegExp("ç", 'g'),"c");
             login = login.replace(new RegExp("[èéêë]", 'g'),"e");
             login = login.replace(new RegExp("[ìíîï]", 'g'),"i");
