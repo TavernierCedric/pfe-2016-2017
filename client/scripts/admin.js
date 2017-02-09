@@ -106,7 +106,25 @@ $('#navProLog').click(function() {
     getProfils();
     getLogiciels();
 });
+/*
+$('#boutonImport').click(function(){
+    var file = $('#infoImport').val();
+    var formData = new FormData();
+    formData.append('file', file);
 
+    $.ajax({
+       url : address+"/csv",
+       type : 'POST',
+       data : formData,
+       processData: false,  // tell jQuery not to process the data
+       contentType: false,  // tell jQuery not to set contentType
+       success : function(data) {
+           console.log(data);
+           alert(data);
+       }
+    });
+});
+*/
 
 // Gestion matricule
 // Récuperation des données apd matricule
@@ -304,9 +322,9 @@ $('#boutonProfilLogicielEnvoyer').click(function(event) {
         timeout: 5000,
         data:JSON.stringify(json),
         success: function(data) {
+            emptyCheckbox();
             for(var i = 0; i < data.length; i++){
                 $("#listeLogiciels :input").each(function(){
-
                     if($(this).val() == data[i].nom)
                         $(this).prop('checked', true);
                 });
@@ -326,7 +344,7 @@ $('#boutonProfilLogicielChanger').click(function(event) {
         nomProfil = $(el).val();
     });
     var json = formToJson($('#listeLogiciels'));
-    var table = {profil : nomProfil, logiciels : JSON.stringify(json)};
+    var table = {profil : nomProfil, logiciels : json};
 
     $.ajax({
         url: address+"/profilslogicielupdate",
@@ -404,7 +422,6 @@ $('#boutonProfilEnregistrer').click(function() {
 // Modifier Profil
 $('#boutonProfilModifier').click(function() {
     var json = formToJson($('#formProfilA'));
-
     $.ajax({
         url: address+"/profilsput",
         type: "POST",
@@ -531,4 +548,10 @@ function closeAccueil(){
     $('#matriculeProfil').html(" ");
     $('#matriculeLogin').html(" ");
     $('#matriculeLogiciels').html(" ");
+}
+
+function emptyCheckbox(){
+    $("#listeLogiciels :input").each(function(){
+        $(this).prop('checked', false);
+    });       
 }
