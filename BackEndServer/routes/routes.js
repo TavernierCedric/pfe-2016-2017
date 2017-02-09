@@ -60,7 +60,6 @@ router.post('/matricule', function (req, res) {
       /* csv inser en fct du csv */
 router.post('/csv', function (req, res) {
        var csvStream = csv.createStream();
-       var records = [];
        fs.createReadStream('importEtudiants2017-01-29.csv').pipe(utf8()).pipe(csvStream)
          .on('error',function(err){
             console.error(err);
@@ -69,8 +68,6 @@ router.post('/csv', function (req, res) {
             res.send("csv import complete")
          })
          .on('data',function(data){
-           records.push(data);
-            console.log(data);
             var matricule = data['"Matric Info"'].replace(/['"]+/g, '');
             var nom = data['"Nom Etudiant"'].replace(/['"]+/g, '')
             nom = nom.replace(/\s+/g, '');
@@ -99,8 +96,6 @@ router.post('/csv', function (req, res) {
             var query3 = 'INSERT INTO utilisateurs (matricule,nom,prenom,login,mail,id_profil,type) SELECT ?,?,?,?,?,?,? WHERE NOT EXISTS (SELECT id_utilisateur FROM utilisateurs WHERE matricule = ?)'
             var profil;
             var created;
-            console.log('begin');
-            models.sequelize.sync().then(function() {
                 Promise.all([
                       models.profils.findOrCreate({
                         where: {
@@ -120,8 +115,7 @@ router.post('/csv', function (req, res) {
                 Promise.all([
                   models.sequelize.query(query3,{ replacements: [matricule,nom,prenom,login,mail,profil,'Etudiant',matricule], type: models.sequelize.QueryTypes.INSERT })
                   ])
-              })
-            });     
+              })    
       });
 
 });
