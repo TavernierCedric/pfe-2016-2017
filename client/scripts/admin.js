@@ -129,7 +129,8 @@ $('#boutonImport').click(function(){
 // Gestion matricule
 // Récuperation des données apd matricule
 $('#bouton').click(function() {
-    var maData = { matricule : $('#matricule').val() };
+  var maData = { matricule : $('#matricule').val() };
+  if (isInt($('#matricule').val())){
     $.ajax({
         url: address+"/matricule",
         type: "POST",
@@ -140,33 +141,37 @@ $('#bouton').click(function() {
         timeout: 5000,
         data: JSON.stringify(maData),
         success: function(data) {
-            if(data.informationetudiant == "null"){
-                $('#test').html("Matricule inconnu");
-                $('#bouton').css("margin-top","4.5vw");          
+          if(data.informationetudiant == "null"){
+            $('#test').html("Matricule inconnu");
+            $('#bouton').css("margin-top","4.5vw");
+          }
+          else{
+            $('#test').html(" ");
+            $('#bouton').css("margin-top","6vw");
+            $('#accueil').css("visibility", "visible");
+            $('#recuperationFeuille').css("visibility", "hidden");
+            var table = data.informationetudiant.split(',');
+            $('#matriculeID').html("ID = "+table[0]);
+            $('#matriculeNom').html("Nom = "+table[1]);
+            $('#matriculePrenom').html("Prenom = "+table[2]);
+            $('#matriculeMail').html("Mail = "+table[3]);
+            $('#matriculeProfil').html("Profil = "+table[4]);
+            $('#matriculeLogin').html("Login = "+table[5]);
+            $('#matriculeLogiciels').css("list-style-type","none");
+            for(var i = 6; i < table.length; i = i + 2){
+                $('#matriculeLogiciels').append("<li> Logiciel = "+table[i]+"</li>");
+                $('#matriculeLogiciels').append("<li> Mdp = "+table[i+1]+"</li>");
             }
-            else{
-                $('#test').html(" ");
-                $('#bouton').css("margin-top","6vw");                
-                $('#accueil').css("visibility", "visible");
-                $('#recuperationFeuille').css("visibility", "hidden");
-                var table = data.informationetudiant.split(',');
-                $('#matriculeID').html("ID = "+table[0]);
-                $('#matriculeNom').html("Nom = "+table[1]);
-                $('#matriculePrenom').html("Prenom = "+table[2]);
-                $('#matriculeMail').html("Mail = "+table[3]);
-                $('#matriculeProfil').html("Profil = "+table[4]);
-                $('#matriculeLogin').html("Login = "+table[5]);
-                $('#matriculeLogiciels').css("list-style-type","none");
-                for(var i = 6; i < table.length; i = i + 2){
-                    $('#matriculeLogiciels').append("<li> Logiciel = "+table[i]+"</li>");
-                    $('#matriculeLogiciels').append("<li> Mdp = "+table[i+1]+"</li>");
-                }
-            }
+        }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            alert(JSON.stringify(jqXHR) + " " + errorThrown + " " + textStatus);
         }
     });
+  }
+  else{
+    $('#test').html("Matricule inconnu");
+    $('#bouton').css("margin-top","4.5vw");
+  }
 });
 
 // Gestion utilisateurs
@@ -554,4 +559,9 @@ function emptyCheckbox(){
     $("#listeLogiciels :input").each(function(){
         $(this).prop('checked', false);
     });       
+}
+
+function isInt(x) {
+   var y = parseInt(x, 10);
+   return !isNaN(y) && x == y && x.toString() == y.toString();
 }

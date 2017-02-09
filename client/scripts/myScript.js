@@ -12,7 +12,8 @@ var address = "http://10.0.115.233:8080";
 // Récuperation des données apd matricule
 $('#bouton').click(function() {
   var maData = { matricule : $('#matricule').val() };
-  $.ajax({
+  if (isInt($('#matricule').val())){
+    $.ajax({
         url: address+"/matricule",
         type: "POST",
         dataType: "JSON",
@@ -25,7 +26,6 @@ $('#bouton').click(function() {
           if(data.informationetudiant == "null"){
             $('#test').html("Matricule inconnu");
             $('#bouton').css("margin-top","4.5vw");
-            alert(JSON.stringify(data));
           }
           else{
             $('#test').html(" ");
@@ -47,9 +47,13 @@ $('#bouton').click(function() {
         }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            alert(jqXHR + " " + errorThrown + " " + textStatus);
         }
     });
+  }
+  else{
+    $('#test').html("Matricule inconnu");
+    $('#bouton').css("margin-top","4.5vw");
+  }
 });
 
 // Fermeture données matricule
@@ -97,3 +101,8 @@ $('#connexionbouton').click(function() {
         }
     });
 });
+
+function isInt(x) {
+   var y = parseInt(x, 10);
+   return !isNaN(y) && x == y && x.toString() == y.toString();
+}
