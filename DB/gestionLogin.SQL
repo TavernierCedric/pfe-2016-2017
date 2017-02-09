@@ -311,33 +311,36 @@ BEGIN
 			END IF;
 		END IF;
 
-		-- On doit maintenant verifier que les logiciels d'avant soient toujours present !
+		-- sinon le nom du logiciel est d'office vide, je sors de la boucle
 
-		FOR logiciel_p IN (SELECT l.id_logiciel, l.nom FROM public.Logiciels l, public.Profils p, public.Profils_Logiciels pl
-						WHERE p.id_profil = pl.id_profil AND l.id_logiciel = pl.id_logiciel AND p.id_profil = id_p) LOOP 
-
-			while (j > 1) LOOP
-				nom_logiciel := split_part(chaine, ',', j);
-
-				j := j + 1;
-
-				-- Si bien present je quitte la boucle while
-				IF (nom_logiciel LIKE logiciel_p.nom) THEN
-					j := 2;
-					EXIT;
-				END IF;
-				
-				-- Si le nom logicile est null alors il a d'office ete supprime dans la checkbox
-				IF (nom_logiciel = '') THEN
-					DELETE FROM public.Profils_Logiciels WHERE id_logiciel = logiciel_p.id_logiciel;
-					j := 2;
-					EXIT;
-				END IF;
-
-			END LOOP;
-		END LOOP; -- Fin du FOR
 		i := 0;
 	END LOOP; -- Fin du WHILE 
+
+	-- On doit maintenant verifier que les logiciels d'avant soient toujours present !
+
+	FOR logiciel_p IN (SELECT l.id_logiciel, l.nom FROM public.Logiciels l, public.Profils p, public.Profils_Logiciels pl
+						WHERE p.id_profil = pl.id_profil AND l.id_logiciel = pl.id_logiciel AND p.id_profil = id_p) LOOP 
+
+		while (j > 1) LOOP
+			nom_logiciel := split_part(chaine, ',', j);
+
+			j := j + 1;
+
+				-- Si bien present je quitte la boucle while
+			IF (nom_logiciel LIKE logiciel_p.nom) THEN
+				j := 2;
+				EXIT;
+			END IF;
+			
+			-- Si le nom logicile est null alors il a d'office ete supprime dans la checkbox
+			IF (nom_logiciel = '') THEN
+				DELETE FROM public.Profils_Logiciels WHERE id_logiciel = logiciel_p.id_logiciel;
+				j := 2;
+				EXIT;
+			END IF;
+
+		END LOOP;
+	END LOOP; -- Fin du FOR
 
 	RETURN 1;
 END;
