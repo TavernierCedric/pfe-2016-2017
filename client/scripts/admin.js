@@ -223,12 +223,8 @@ $('#boutonUtilisateur').click(function(event) {
             timeout: 5000,
             data: JSON.stringify(json),
             success: function(data) {
-                alert('Inscription reussie');
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR + " " + errorThrown + " " + textStatus);
-                $('.erreur').remove();
-                $('#boutonUtilisateur').before('<div class="erreur" >Erreur : Inscription ratee !</div>');
             }
         });
     }
@@ -245,10 +241,8 @@ $('#boutonUtilisateur').click(function(event) {
             timeout: 5000,
             data: JSON.stringify(json),
             success: function(data) {
-                $('#erreurUtilisateur').html("Erreur");
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                $('#erreurUtilisateur').html("Erreur");
             }
         });
     }
@@ -274,12 +268,8 @@ $('#boutonProfilEnregistrer').click(function(event) {
         timeout: 5000,
         data: JSON.stringify(json),
         success: function(data) {
-             alert('Enregistrement réussie Logiciel');
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR + " " + errorThrown + " " + textStatus);
-            $('.erreur').remove();
-            $('#boutonLogiciel').before('<div class="erreur" >Erreur : Logiciel inexistant !</div>');
         }
     });
 });
@@ -302,12 +292,8 @@ $('#boutonProfilModifier').click(function(event) {
         timeout: 5000,
         data: JSON.stringify(json),
         success: function(data) {
-            alert('Modification reussie Logiciel');
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR + " " + errorThrown + " " + textStatus);
-            $('.erreur').remove();
-            $('#boutonLogicielModifier').before('<div class="erreur" >Erreur : Modification ratee Logiciel!</div>');
         }
     });
 });
@@ -330,12 +316,8 @@ $('#boutonProfilSupprimer').click(function(event) {
         timeout: 5000,
         data: JSON.stringify(json),
         success: function(data) {
-            alert('Suppression reussie Logiciel');
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR + " " + errorThrown + " " + textStatus);
-            $('.erreur').remove();
-            $('#boutonLogicielSupprimer').before('<div class="erreur" >Erreur : Suppression ratee Logiciel !</div>');
         }
     });
 });
@@ -354,7 +336,6 @@ function getProfils() {
         timeout: 5000,
         data:null,
         success: function(data) {
-            // Doit me renvoyer les noms des logiciels
             for(var i = 0; i < data.length; i++){
                 $('#utilisateurSelect').append("<option value='"+data[i].nom+"' name='name'>"+data[i].nom+"</option>");
                 $('#profilSelect').append("<option value='"+data[i].nom+"' name='name'>"+data[i].nom+"</option>");
@@ -362,7 +343,6 @@ function getProfils() {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            alert('Erreur chargement getProfils !');
         }
     });
 }
@@ -385,6 +365,9 @@ $('#boutonLogicielEnregistrer').click(function(event) {
             beforeSend: function(xhr){xhr.setRequestHeader('x-access-token',localStorage.getItem('token'));},
             data: JSON.stringify(json),
             success: function(data) {
+            },
+            error:function(jqXHR, textStatus, errorThrown){
+
             }
         });
     }
@@ -411,13 +394,8 @@ $('#boutonLogicielModifier').click(function() {
             timeout: 5000,
             data: JSON.stringify(json),
             success: function(data) {
-                alert('Modification reussie');
-              //$('#bouton').before('<div class="reussite">Inscription reussie</div>');
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR + " " + errorThrown + " " + textStatus);
-                $('.erreur').remove();
-                $('#boutonLogicielModifier').before('<div class="erreur" >Erreur : Modification ratee !</div>');
             }
         });
     }
@@ -446,13 +424,8 @@ $('#boutonLogicielSupprimer').click(function(event) {
             timeout: 5000,
             data: JSON.stringify(json),
             success: function(data) {
-                alert('Suppression reussie');
-              //$('#bouton').before('<div class="reussite">Inscription reussie</div>');
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR + " " + errorThrown + " " + textStatus);
-                $('.erreur').remove();
-                $('#boutonLogicielSupprimer').before('<div class="erreur" >Erreur : Suppression ratee !</div>');
             }
         });
     }
@@ -475,7 +448,6 @@ function getLogiciels() {
         timeout: 5000,
         data:null,
         success: function(data) {
-            // Doit me renvoyer les noms des logiciels
             for(var i = 0; i < data.length; i++){
                 $('#logicielSelect').append("<option value='"+data[i].nom+"' name='name'>"+data[i].nom+"</option>");
                 $('#listeLogiciels').append("<input name='name' type='checkbox' value='"+data[i].nom+"'> "+data[i].nom+"<br>");
@@ -515,7 +487,6 @@ $('#boutonProfilLogicielEnvoyer').click(function(event) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            alert('Erreur chargement getLogiciels !');
         }
     });
 });
@@ -545,10 +516,8 @@ $('#boutonProfilLogicielChanger').click(function(event) {
         timeout: 5000,
         data:JSON.stringify(table),
         success: function(data) {
-            alert("ok");
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            alert('Erreur chargement getLogiciels !');
         }
     });
 });
@@ -585,7 +554,6 @@ $('#boutonEnvoyerScript').click(function(event){
                 $('#gestionScripts').append(a);
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                //
             }
         });
     }
@@ -611,7 +579,6 @@ $('#boutonEnvoyerScript').click(function(event){
                 $('#gestionScripts').append(a);
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                //
             }
         });
     }
@@ -634,9 +601,9 @@ $('#boutonEnvoyerScript').click(function(event){
                 a.download    = 'nutrilog.csv';
                 a.click();
 
-                $('#gestionScripts').append(a);            },
+                $('#gestionScripts').append(a);            
+            },
             error: function(jqXHR, textStatus, errorThrown) {
-                //
             }
         });
     }
