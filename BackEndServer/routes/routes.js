@@ -1,3 +1,4 @@
+// Variables a USE
 var bcrypt = require('bcrypt-nodejs'),
   express = require('express'),
   router = express.Router(),
@@ -12,11 +13,8 @@ var bcrypt = require('bcrypt-nodejs'),
   copyTo = require('pg-copy-streams').to,
   csv2 = require('csv');
   randomstring = require("randomstring");
-/*var randomstring = require("randomstring");
-randomstring.generate({
-length: 12,
-charset: 'alphabetic'
-}); */
+
+// 1. Route pour la connexion
 router.post('/connexion', function (req, res) {
 
   models.sequelize.query('SELECT utilisateurs_logiciels.mdp, utilisateurs.login FROM utilisateurs AS utilisateurs, utilisateurs_logiciels AS utilisateurs_logiciels WHERE utilisateurs_logiciels.id_utilisateur = utilisateurs.id_utilisateur '
@@ -41,14 +39,10 @@ router.post('/connexion', function (req, res) {
   }).catch(function (err) {
     console.log("user not found")
     res.json({ success: false, message: 'Authentication failed. User not found.' });
-});
-});
-
-router.post('/deconnexion', function (req, res) {
-  var table = req.body;
-  res.json("reussis");
+  });
 });
 
+// 2. Route pour recuperer donnee sur la matricule
 router.post('/matricule', function (req, res) {
   models.sequelize.query('SELECT * FROM informationEtudiant(?)', { replacements: [req.body.matricule], type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
     if (err) {
@@ -60,7 +54,7 @@ router.post('/matricule', function (req, res) {
   });
 });
 
-/* csv inser en fct du csv */
+// 3. Route qui permet l'insertion d'un CSV dans la DB
 router.post('/csv', function (req, res) {
   var csvStream = csv.createStream();
   fs.createReadStream(req.body.file ||'importEtudiants2017-01-29.csv').pipe(utf8()).pipe(csvStream)
@@ -68,7 +62,6 @@ router.post('/csv', function (req, res) {
       console.error(err);
     })
     .on('end', function () {
-      // res.send("csv import complete")
     })
     .on('data', function (data) {
       var matriculeData = data['"Matric Info"'].replace(/['"]+/g, '');
@@ -147,6 +140,7 @@ router.post('/csv', function (req, res) {
     });
   });
 
+  // 4. Apd ici il faut un token pour utiliser les routes
   router.use(function (req, res, next) {
 
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
@@ -170,7 +164,7 @@ router.post('/csv', function (req, res) {
     }
   });
 
-
+  // 5. Route pour ajouter un profil
   router.post('/profilsajout', function (req, res) {
     models.profils.findOrCreate({
       where: {
@@ -191,6 +185,7 @@ router.post('/csv', function (req, res) {
 
   });
 
+  // 6. Route pour get tous les profil sauf Admin
   router.get('/profils/', function (req, res) {
     models.sequelize.query('SELECT * FROM profils where nom NOT LIKE ?', {  replacements: ['Admin'], type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
       if (err) {
@@ -203,7 +198,7 @@ router.post('/csv', function (req, res) {
   });
 
 
-
+  // 7. Route pour set un profil
   router.post('/profilsput', function (req, res) {
     models.profils.find({
       where: {
@@ -219,7 +214,8 @@ router.post('/csv', function (req, res) {
       }
     });
   });
-  // Suppression de FK utilisée impossible
+
+  // 8. Route pour supprimer un profil
   router.post('/profilsdelete', function (req, res) {
     models.profils.destroy({
       where: {
@@ -230,6 +226,7 @@ router.post('/csv', function (req, res) {
     });
   });
 
+  // 9. Route pour get tous les logiciels sauf GLOBAL -> L'application meme
   router.get('/logiciels', function (req, res) {
     models.sequelize.query('SELECT * FROM logiciels l WHERE l.nom NOT LIKE \'GLOBAL\'', { type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
       if (err) {
@@ -241,6 +238,7 @@ router.post('/csv', function (req, res) {
     });
   });
 
+  // 10. Route pour inserer un utilisateur (Etudiant)
   router.get('/utilisateurs', function (req, res) {
     models.sequelize.query('SELECT * FROM insererUtilisateur(?,?,?,?,?,?,?)', { replacements: [req.body.matricule, req.body.nom, req.body.prenom, req.body.mail, req.body.type, req.body.login, req.body.id_profil], type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
       if (err) {
@@ -252,6 +250,7 @@ router.post('/csv', function (req, res) {
     });
   });
 
+  // 11. Route pour inserer un utilisateur INVITE
   router.post('/utilisateursinvitee', function (req, res) {
     var nom = req.body.nom;
     var prenom = req.body.prenom;
@@ -286,6 +285,7 @@ router.post('/csv', function (req, res) {
     }
   });
 
+  // 12. Route pour inserer un utilisateur PROF
   router.post('/utilisateursprof', function (req, res) {
     var nom = req.body.nom;
     var prenom = req.body.prenom;
@@ -322,7 +322,7 @@ router.post('/csv', function (req, res) {
     }
   });
 
-
+  // 13. Route pour inserer un logiciel
   router.post('/logicielsajout', function (req, res) {
     models.sequelize.query('SELECT * FROM ajoutLogiciel(?)', { replacements: [req.body.nom], type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
       if (err) {
@@ -333,6 +333,7 @@ router.post('/csv', function (req, res) {
     });
   });
 
+  // 14. Route pour supprimer un logiciel
   router.post('/logicielsdelete', function (req, res) {
     models.sequelize.query('SELECT * FROM suppressionLogiciel(?)', { replacements: [req.body.name], type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
       if (err) {
@@ -342,6 +343,8 @@ router.post('/csv', function (req, res) {
       }
     });
   });
+
+  // 15. Route pour modifier un logiciel
   router.post('/logicielsput', function (req, res) {
     models.sequelize.query('UPDATE logiciels SET nom=? WHERE nom LIKE ? ', { replacements: [req.body.nom, req.body.name], type: models.sequelize.QueryTypes.UPDATE }).then(function (data, err) {
       if (err) {
@@ -352,7 +355,7 @@ router.post('/csv', function (req, res) {
     });
   });
 
-
+  // 16. Route pour get toutes les informations necessaire pour generer un fichier BAT pour l'application Windows
   router.get('/windows', function (req, res) {
     models.sequelize.query('SELECT * FROM windowsVersBAT', {type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
       if (err) {
@@ -363,6 +366,7 @@ router.post('/csv', function (req, res) {
     });
   });
 
+  // 17. Route pour get toutes les informations necessaire pour generer un fichier CSV pour l'application Nutrilog
   router.get('/nutrilog', function (req, res) {
     models.sequelize.query('SELECT * FROM nutrilogVersCSV', {type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
       if (err) {
@@ -373,6 +377,7 @@ router.post('/csv', function (req, res) {
     });
   });
 
+  // 18. Route pour get toutes les informations necessaire pour generer un fichier CSV pour l'application Claroline
   router.get('/claroline', function (req, res) {
     models.sequelize.query('SELECT * FROM clarolineVersCSV', {type: models.sequelize.QueryTypes.SELECT }).then(function (data, err) {
       if (err) {
@@ -383,6 +388,7 @@ router.post('/csv', function (req, res) {
     });
   });
 
+  // 19. Route pour get tous les logiciels d'un profil
   router.post('/profilslogiciel', function (req, res) {
     var profil = req.body.name;
     var query = 'select l.nom from public.Profils p, public.Profils_Logiciels pl, public.Logiciels l where p.id_profil = pl.id_profil AND l.id_logiciel = pl.id_logiciel AND p.nom LIKE ?';
@@ -394,6 +400,8 @@ router.post('/csv', function (req, res) {
       }
     });
   })
+
+  // 20. Route pour update les logiciels d'un profil
   router.post('/profilslogicielupdate', function (req, res) {
     var profil = req.body.profil;
     for (var attributename in req.body.logiciels) {
