@@ -1,6 +1,7 @@
 // Variables a USE
 var bcrypt = require('bcrypt-nodejs'),
   express = require('express'),
+  path = require('path'),
   router = express.Router(),
   models = require('../models/index'),
   jwt = require('jsonwebtoken'),
@@ -56,12 +57,17 @@ router.post('/matricule', function (req, res) {
 
 // 3. Route qui permet l'insertion d'un CSV dans la DB
 router.post('/csv', function (req, res) {
+  var ext = path.extname(req.body.file ||'importEtudiants2017-01-29.csv');
+  if (ext != '.csv'){
+    console.log("wrong extension")
+  }else{
   var csvStream = csv.createStream();
   fs.createReadStream(req.body.file ||'importEtudiants2017-01-29.csv').pipe(utf8()).pipe(csvStream)
     .on('error', function (err) {
       console.error(err);
     })
     .on('end', function () {
+      res.json({ success: true, message: 'import completed' });
     })
     .on('data', function (data) {
       var matriculeData = data['"Matric Info"'].replace(/['"]+/g, '');
@@ -134,10 +140,11 @@ router.post('/csv', function (req, res) {
             }
           })
         ]).then(function () {
-          models.sequelize.query(query4, { replacements: [user, profil, randomsPasword], type: models.sequelize.QueryTypes.INSERT });
+          models.sequelize.query(query4, { replacements: [user, profil, randomsPasword], type: models.sequelize.QueryTypes.INSERT})
         })
       });
     });
+  }
   });
 
   // 4. Apd ici il faut un token pour utiliser les routes
