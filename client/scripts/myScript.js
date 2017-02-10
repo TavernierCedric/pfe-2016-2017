@@ -1,16 +1,9 @@
-$('#importer_button').click(function(){
-    $('#importer').css("visibility", "visible");
-})
-
-// Créer utilisateur
-
-// Créer logiciel
-
-// Créer profil
-var address = "http://10.0.115.233:8080";
+// Variable pour garder address du serveur
+var address = "http://localhost:8080";
 
 // Récuperation des données apd matricule
-$('#bouton').click(function() {
+$('#boutonMatricule').click(function(event) {
+  event.preventDefault();
   var maData = { matricule : $('#matricule').val() };
   if (isInt($('#matricule').val())){
     $.ajax({
@@ -24,12 +17,12 @@ $('#bouton').click(function() {
         data: JSON.stringify(maData),
         success: function(data) {
           if(data.informationetudiant == "null"){
-            $('#test').html("Matricule inconnu");
-            $('#bouton').css("margin-top","4.5vw");
+            $('#erreurMatricule').html("Matricule inconnu");
+            $('#boutonMatricule').css("margin-top","4.5vw");
           }
           else{
-            $('#test').html(" ");
-            $('#bouton').css("margin-top","6vw");
+            $('#erreurMatricule').html(" ");
+            $('#boutonMatricule').css("margin-top","6vw");
             $('#accueil').css("visibility", "visible");
             $('#recuperationFeuille').css("visibility", "hidden");
             var table = data.informationetudiant.split(',');
@@ -51,9 +44,40 @@ $('#bouton').click(function() {
     });
   }
   else{
-    $('#test').html("Matricule inconnu");
-    $('#bouton').css("margin-top","4.5vw");
+    $('#erreurMatricule').html("Matricule inconnu");
+    $('#boutonMatricule').css("margin-top","4.5vw");
   }
+});
+
+// Connexion d'un admin
+$('#connexionbouton').click(function(event) {
+  $('#error').html("");
+  event.preventDefault();
+  var maData = { login : $('#login').val(), mdp : $('#mdp').val()};
+  $.ajax({
+        url: address+"/connexion",
+        type: "POST",
+        dataType: "JSON",
+        crossDomain: true,
+        contentType: "application/json",
+        cache: false,
+        timeout: 5000,
+        data: JSON.stringify(maData),
+        success: function(data) {
+          if(data.success){
+            localStorage.setItem('token', data.token);
+            document.location.href="admin.html";
+          }
+          else{
+            $('#erreurConnexion').html("Donnees recues inconnues");
+            $('#connexionbouton').css("margin-top","1vw");
+          }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            $('#erreurConnexion').html("Donnees recues inconnues");
+            $('#connexionbouton').css("margin-top","1vw");        
+          }
+    });
 });
 
 // Fermeture données matricule
@@ -77,37 +101,10 @@ $('#boutonConnexion').click(function() {
 // Fermer la fenêtre de connexion
 $('#closeConnexionButton').click(function() {
   $("#hide").css("visibility","hidden");
+  $('#connexionbouton').css("margin-top","2.5vw");        
 });
 
-// Connexion d'un admin
-$('#connexionbouton').click(function(event) {
-  $('#error').html("");
-  event.preventDefault();
-  var maData = { login : $('#login').val(), mdp : $('#mdp').val()};
-  $.ajax({
-        url: address+"/connexion",
-        type: "POST",
-        dataType: "JSON",
-        crossDomain: true,
-        contentType: "application/json",
-        cache: false,
-        timeout: 5000,
-        data: JSON.stringify(maData),
-        success: function(data) {
-          if(data.success){
-            localStorage.setItem('token', data.token);
-            document.location.href="admin.html";
-          }
-          else{
-            $('#error').html("Donnees recues inconnues");
-          }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            $('#error').html("Donnees recues inconnues");
-        }
-    });
-});
-
+// Verifie si paramètre recu est un int
 function isInt(x) {
    var y = parseInt(x, 10);
    return !isNaN(y) && x == y && x.toString() == y.toString();

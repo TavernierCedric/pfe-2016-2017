@@ -1,3 +1,7 @@
+/***************/
+/* DEBUT BASES */
+/***************/
+
 *{
 	margin: 0 0 0 0;
 	padding : 0 0 0 0;
@@ -7,175 +11,53 @@ h1{
 	font-size:2vw;
 }
 
+h2{
+	color:white;
+}
+
 p{
 	font-size:1.2vw;
 }
 
-#close_accueil{
-	color:red;
-	margin-left:98%;
+/* Classe affichage */
+.styleBox{
+	background-color: #08D2DC;
+	width:30%;
+	height:20vw;
 }
+
+/* FIN BASES */
+
+
+/****************/
+/* DEBUT HEADER */
+/****************/
 
 #banner{
 	position:relative;
 	width: 100%;
-    height: 4.5vw;
-    background-color: #03A9F4;
-    box-shadow: 0px 0px 3px grey;
+    height: 3vw;
+    text-align:center;
+    background-color: #08D2DC;
 }
 
 #titre {
 	position:relative;
 	color:white;
-	font-size: 3.5vw;
-	margin-left:37%;
+	font-size: 2vw;
 	padding-top:0.2vw;
 }
 
-#boutonConnexion{
-	font-size:1.5vw;
-	position:relative;
-	background-color:white;
-	margin-left:90%;
-	box-shadow: 0px 0px 3px gray;
-	color:black;
-	width:8vw;
-	height:2vw;
-	margin-top: -3.4%;
-	margin-right:3%;
-	padding-top:0.5vw;
-	padding-bottom:0.5vw;
-	padding-left:1.5vw;
-	border-radius: 0.5vw;
-}
-#boutonConnexion:hover{
-	font-size:1.5vw;
-	position:relative;
-	background-color:gray;
-	margin-left:90%;
-	box-shadow: 0px 0px 3px gray;
-	color:white;
-	width:8vw;
-	height:2vw;
-	margin-top: -3.4%;
-	margin-right:3%;
-	padding-top:0.5vw;
-	padding-bottom:0.5vw;
-	padding-left:1.5vw;
-	border-radius: 0.5vw;
-}
+/* FIN HEADER */
 
-#boutonDec{
-	font-size:1.5vw;
-	position:relative;
-	background-color:white;
-	margin-left:90%;
-	box-shadow: 0px 0px 3px gray;
-	color:black;
-	width:8vw;
-	height:2vw;
-	margin-top: -3.4%;
-	margin-right:3%;
-	padding-top:0.5vw;
-	padding-bottom:0.5vw;
-	padding-left:0.5vw;
-	border-radius: 0.5vw;
-}
-#boutonDec:hover{
-	font-size:1.5vw;
-	position:relative;
-	background-color:gray;
-	margin-left:90%;
-	box-shadow: 0px 0px 3px gray;
-	color:white;
-	width:8vw;
-	height:2vw;
-	margin-top: -3.4%;
-	margin-right:3%;
-	padding-top:0.5vw;
-	padding-bottom:0.5vw;
-	padding-left:0.5vw;
-	border-radius: 0.5vw;
-}
-#accueil{
-	text-align:center;
-	margin-top:5vw;
-	margin-left:10vw;
-	width:80%;
-	background-color: white;
-	box-shadow: 0px 0px 5px gray;
-	height: 40vw;
-}
-#titre_accueil{
-	margin-left:0%;
-}
-#recuperationFeuille{
-	margin-top: -35%;
-    margin-left: 33%;
-	width:30%;
-	box-shadow: 0px 0px 5px gray;
-	height:20vw;
-}
-
-#bouton{
-	margin-left:11.2vw;
-	font-size:1.5vw;
-	position: relative;
-	margin-top:6vw;
-	background-color:white;
-	color:black;
-	box-shadow: 0px 0px 3px gray;
-	width:7vw;
-	padding-top:0.5vw;
-	padding-bottom:0.5vw;
-	padding-left:0.5vw;
-	height: 2vw;
-	border-radius:4px;
-}
-#bouton:hover{
-	margin-top:6vw;
-	margin-left:11.2vw;
-	font-size:1.5vw;
-	background-color:gray;
-	color:white;
-	box-shadow: 0px 0px 3px gray;
-	width:7vw;
-	padding-top:0.5vw;
-	padding-bottom:0.5vw;
-	padding-left:0.5vw;
-	height:2vw;
-	border-radius:4px;
-}
-
-#connexionbouton{
-	font-size:1.5vw;
-	position: relative;
-	margin-top:6vw;
-	background-color:white;
-	color:black;
-	box-shadow: 0px 0px 3px gray;
-	width:10vw;
-	height: 2vw;
-	border-radius:4px;
-}
-#connexionbouton:hover{
-	margin-top:6vw;
-	font-size:1.5vw;
-	background-color:gray;
-	color:white;
-	box-shadow: 0px 0px 3px gray;
-	width:10vw;
-	height:2vw;
-	border-radius:4px;
-}
-
-.erreur {
-			color:red;
-			border:3px;
-			font-weight: bold;
-}
+/**************/
+/* DEBUT MENU */ 
+/**************/
 nav {
 	text-align:center;
+	border-radius:4px;
+	height:5%;
+	padding: 0 0 0 0;
 }
 nav ul {
 	padding: 0px;
@@ -186,12 +68,11 @@ nav ul {
 
 nav li {
 	display: inline-block;
-	width: 100px;
+	width: 120px;
 	margin:0px;
 	padding:0px;
-	border-right: 1px solid #CCCCCC;
 	text-align:center;
-	line-height: 40px;
+	line-height: 2vw;
 	color:#FDFEFE;
 }
 
@@ -203,4 +84,267 @@ nav li a {
 	display:block;
 	text-decoration: none;
 	color: #FFFFFF;
+}
+/* FIN MENU */
+
+
+/*****************/
+/* DEBUT BOUTONS */ 
+/*****************/
+
+/* Classe des boutons */
+.bouton{
+	border:none;
+	background-color:#F38503;
+	color:white;
+	width:auto;
+	padding-left:0.5vw;
+	padding-right:0.5vw;
+	height: 2vw;
+	font-size:1.5vw;
+	border-radius:4px;
+}
+
+.bouton:hover{
+	border:none;
+	background-color:#DC5C08;
+	color:white;
+	width:auto;
+	padding-left:0.5vw;
+	padding-right:0.5vw;
+	height: 2vw;
+	font-size:1.5vw;
+	border-radius:4px;
+}
+
+/* Positionnement de chaque bouton en fonction de l'id */
+#boutonMatricule{
+	position: absolute;
+	margin-top:6vw;
+	margin-left:-3.5vw;
+	border-radius:4px;
+}
+#boutonConnexion{
+	position: absolute;
+	right:1%;
+	top:17%;
+}
+
+#boutonDec{
+	position: absolute;
+	right:1%;
+	top:17%;
+}
+
+#connexionbouton{
+	font-size:1.5vw;
+	position: relative;
+	margin-top:2.5vw;
+}
+
+#closeConnexionButton{
+	margin-left:95%;
+	color:red;
+}
+
+/* FIN BOUTONS */
+
+/*****************/
+/* DEBUT ERREURS */
+/*****************/
+.erreur {
+			color:red;
+			font-weight: bold;
+}
+/* FIN ERREURS */
+
+
+/****************/
+/* DEBUT INPUTS */ 
+/****************/
+
+/* Classes inputs */
+.input{
+	width:15vw;
+	height:2vw; 	
+	padding-left:0.5vw;
+	padding-right:0.5vw;
+	font-size:1.5vw;
+	background-color: white;
+	text-align:center;
+}
+
+#listeLogiciels{
+	color:white;
+}
+
+/* Positionnement inputs */
+#login{
+	margin-top:2vw; 
+}
+
+/* FIN INPUTS */
+
+
+/****************/
+/* DEBUT SELECT */ 
+/****************/
+
+/* Classes inputs */
+.select{
+	border:none;
+	background-color:#F38503;
+	color:white;
+	width:auto;
+	padding-left:0.5vw;
+	padding-right:0.5vw;
+	height: 2vw;
+	font-size:1.5vw;
+	border-radius:4px;
+}
+
+/* FIN SELECT */
+
+/********************************/
+/* DEBUT RECUPERATION MATRICULE */ 
+/********************************/
+
+#accueil{
+	color:black;
+	text-align:center;
+	margin-top:5vw;
+	margin-left:10vw;
+	width:80%;
+	background-color: white;
+	box-shadow: 0px 0px 7px #08D2DC;
+	height: 40vw;
+}
+
+#titre_accueil{
+	margin-left:0%;
+	color:#08D2DC;
+}
+
+#close_accueil{
+	color:red;
+	margin-left:98%;
+}
+
+#recuperationFeuille{
+	visibility:visible;
+	position:absolute;
+	text-align:center;
+	margin-top: -35%;
+    margin-left: 35%;
+}
+
+#matricule{
+	margin-top:2vw;
+	margin-bottom:2vw;
+}
+
+#infoMatricule{
+	margin-top:2%;
+}
+
+#headerMatricule{
+	text-align:left;
+	margin-left:3%;
+}
+
+#bodyMatricule{
+	margin-top:3%;
+}
+
+/* FIN RECUPERATION MATRICULE */ 
+
+
+/***************************/
+/* DEBUT FENETRE CONNEXION */ 
+/***************************/
+
+#hide{
+	text-align:center;
+	position:fixed;
+	visibility:hidden;
+	width:100%;
+	height:100%;
+	background-color:rgba(0,0,0,0.3);
+	top:0px;
+	left:0px;
+}
+
+#connexion{
+	position:fixed;
+	width:30%;
+	height:20vw;
+	background-color:#08D2DC;
+	margin-top:13%;
+	margin-left:35%;
+}
+
+#closeConnexion{
+	color:red;
+	margin-left:98%;
+}
+
+/* FIN FENETRE CONNEXION */
+
+
+/***********************/
+/* DEBUT NAV SUR ADMIN */ 
+/***********************/
+
+#gestionUtilisateur{
+	visibility:hidden;
+	position:absolute;
+	text-align:center;
+	margin-top:-35vw;
+	margin-left:35vw;
+	height:24vw;
+}
+
+#gestionScripts{
+	visibility:hidden;
+	position:absolute;
+	text-align:center;
+	margin-top:-35vw;
+	margin-left:35vw;
+	height:10vw;
+}
+
+#gestionImport{
+	visibility:hidden;
+	position:absolute;
+	text-align:center;
+	margin-top:-35vw;
+	margin-left:35vw;
+	height:10.5vw;
+}
+
+#gestionProfilLogiciel{
+	visibility:hidden;
+	position:absolute;
+	text-align:center;
+	margin-top:-35vw;
+	margin-left:35vw;
+	height:20vw;
+}
+
+#gestionProfil{
+	visibility:hidden;
+	position:absolute;
+	text-align:center;
+	margin-top:-35vw;
+	margin-left:35vw;
+	height:23vw;
+}
+
+#gestionLogiciel{
+	visibility:hidden;
+	position:absolute;
+	text-align:center;
+	margin-top:-35vw;
+	margin-left:35vw;
+	height:23vw;
 }

@@ -1,56 +1,68 @@
-<!doctype html>
+<!DOCTYPE html>
 
 <html>
 	<head>
-		<title>Gestion De Logins</title>
+		<title>Gestion De Login</title>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 	</head>
 	<body> 
+
+		<!-- HEADER -->
 		<div id="firstBody">
 			<div id="banner">
-				<p id="titre"> Gestion de Logins </p>
-				<div id="boutonConnexion"> Connexion </div>
+				<p id="titre"> Gestion de Login </p>
+				<input type="submit" id="boutonConnexion" class="bouton" value="Connexion"/>
 			</div>
 
-			<!-- Affichage données -->
+			<!-- AFFICHAGE DONNEES MATRICULE -->
 			<div id="accueil" style="visibility:hidden;">
 				<a id="close_accueil">X</a>
 				<h1 id="titre_accueil">Feuille de login</h1>
 				<div id="infoMatricule">
-					<p id="matriculeID"></p>
-					<p id="matriculeNom"></p>
-					<p id="matriculePrenom"></p>
-					<p id="matriculeMail"></p>
-					<p id="matriculeProfil"></p>
-					<p id="matriculeLogin"></p>
-					<ul id="matriculeLogiciels">
-					</ul>
+					<div id="headerMatricule">
+						<p id="matriculeID"></p>
+						<p id="matriculeNom"></p>
+						<p id="matriculePrenom"></p>
+						<p id="matriculeMail"></p>
+						<p id="matriculeProfil"></p>
+						<p id="matriculeLogin"></p>
+					</div>
+					<div id="bodyMatricule">
+						<h3>Liste des Logiciels</h3>
+						<br>
+						<ul id="matriculeLogiciels">
+						</ul>
+					</div>
 				</div>
 				
 			</div>
 
 
 
-			<!-- Demande des données du matricule donnée -->
-			<div id="recuperationFeuille" style="visibility:visible;position:absolute;text-align:center;">
+			<!-- DEMANDE DONNEES MATRICULE -->
+			<div id="recuperationFeuille" class="styleBox">
 				<form>
-					<h1 style="padding-top:2vw;">Matricule</h1>
-					<input id="matricule" style="margin-top:2vw;margin-bottom:2vw;width:15vw;height:2vw; font-size:1.3vw; text-align:center;" type="text" required/></p>
-					<p id="test"></p>
-					<div id="bouton">Recuperer</div>
+					<h1 style="padding-top:2vw;color:white;">Matricule</h1>
+					<input id="matricule" class="input" type="text" placeholder="Matricule" required/></p>
+					<p id="erreurMatricule" class="erreur"></p>
+					<input type="submit" class="bouton" id="boutonMatricule" value="Recuperer"></div>
 				</form>
 			</div>
 				
-			<div id="hide" style="text-align:center;position:fixed;visibility:hidden;width:100%;height:100%;background-color:rgba(0,0,0,0.3);top:0px;left:0px;">
-				<div id="connexion" style="position:fixed;width:40%;height:30vw;background-color:white;margin-top:12%;margin-left:30%;box-shadow: 0px 0px 3px gray;">
-					<h1 style="margin-left:37%;">Connexion <a id="closeConnexionButton" style="margin-left:45%;color:red;">X</a></h1>
+			<!-- Connexion -->
+			<div id="hide">
+				<div id="connexion">
+					<a id="closeConnexionButton">X</a>
+					<h1 style="padding-top:0.8vw;color:white;">Connexion </h1><!-- <a id="closeConnexionButton" style="color:red;">X</a>-->
 					<form>
-						<p id="error"></p>
-						<p>Login
-						<input id="login" style="margin-top:2vw;margin-bottom:2vw;width:15vw;height:2vw; font-size:1.3vw; text-align:center;" type="text" required/></p>
-						<p>Mot de passe
-						<input id="mdp" style="margin-top:2vw;margin-bottom:2vw;width:15vw;height:2vw; font-size:1.3vw; text-align:center;" type="password" required/></p>				
-						<input type="submit" id="connexionbouton" value="Se connecter"/>
+						<input id="login" class="input" type="text" placeholder="Login" required/>
+						<br>
+						<br>
+						<input id="mdp" class="input" type="password" placeholder="Password" required/>
+						<br>
+						<br>
+						<p id="erreurConnexion" class="erreur">   </p>
+						<input type="submit" id="connexionbouton" class="bouton" value="Se connecter"/>
 					</form>
 				</div>
 			</div>
