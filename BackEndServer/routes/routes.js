@@ -67,7 +67,6 @@ router.post('/csv', function (req, res) {
       console.error(err);
     })
     .on('end', function () {
-      res.json({ success: true, message: 'import completed' });
     })
     .on('data', function (data) {
       var matriculeData = data['"Matric Info"'].replace(/['"]+/g, '');
